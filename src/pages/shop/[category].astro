@@ -21,9 +21,11 @@ const others = CATEGORIES.filter((c) => c.slug !== category.slug);
 >
   <!-- Editorial category hero -->
   <section class="relative pt-20 pb-16 lg:pt-28 lg:pb-24 overflow-hidden">
-    <div class="absolute inset-0">
-      <img src={category.image} alt="" class="w-full h-full object-cover" data-parallax="0.15" />
-      <div class="absolute inset-0 bg-gradient-to-t from-brand-blue-deep/95 via-brand-blue-deep/70 to-brand-blue-deep/40"></div>
+    <div class="absolute inset-0" aria-hidden="true">
+      <div class="absolute inset-0" style="background:
+        radial-gradient(at 22% 28%, rgb(206 42 45 / 0.40) 0%, transparent 55%),
+        radial-gradient(at 78% 60%, rgb(28 58 111 / 0.55) 0%, transparent 60%),
+        linear-gradient(180deg, #0C2146 0%, #10182A 100%);"></div>
       <div class="noise absolute inset-0"></div>
     </div>
     <div class="container-x relative text-white">

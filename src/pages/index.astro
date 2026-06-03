@@ -4,6 +4,7 @@ import Icon from '@/components/Icon.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 import StatsCounter from '@/components/StatsCounter.astro';
 import CategoryCard from '@/components/CategoryCard.astro';
+import CategoryArtwork from '@/components/CategoryArtwork.astro';
 import ProductCard from '@/components/ProductCard.astro';
 import BrandMarquee from '@/components/BrandMarquee.astro';
 import ReviewsSection from '@/components/ReviewsSection.astro';
@@ -221,9 +222,8 @@ import { SITE } from '@/data/site';
               <p class="mt-3 text-muted text-[15px] leading-relaxed text-pretty max-w-md">{CATEGORIES[6].blurb}</p>
               <span class="mt-6 inline-flex items-center gap-2 font-display uppercase tracking-wider text-[12px] text-brand-red">Browse Range <Icon name="arrow-right" class="arrow" size={14} /></span>
             </div>
-            <div class="relative aspect-[4/3] md:aspect-auto bg-bone overflow-hidden order-1 md:order-2">
-              <img src={CATEGORIES[6].image} alt={CATEGORIES[6].title} loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-              <div class="absolute inset-0 bg-gradient-to-l from-transparent to-brand-blue/30"></div>
+            <div class="relative aspect-[4/3] md:aspect-auto overflow-hidden order-1 md:order-2 min-h-[260px]">
+              <CategoryArtwork slug={CATEGORIES[6].slug} title={CATEGORIES[6].title} count={CATEGORIES[6].count} wide />
             </div>
           </div>
         </a>
@@ -255,17 +255,23 @@ import { SITE } from '@/data/site';
 
   <!-- ──────────────────────────────────────── CLASSIC CARS — CINEMATIC HERITAGE ──────────────────────────────────────── -->
   <section class="relative py-28 lg:py-40 overflow-hidden bg-brand-blue-deep text-white">
-    <!-- Parallax photo backdrop -->
+    <!-- Brand-coloured cinematic mesh backdrop -->
     <div class="absolute inset-0" aria-hidden="true">
-      <img
-        src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?w=1800&q=82&auto=format&fit=crop"
-        alt=""
-        class="w-full h-full object-cover opacity-55"
-        data-parallax="0.12"
-        loading="lazy"
-      />
-      <div class="absolute inset-0 bg-gradient-to-r from-brand-blue-deep via-brand-blue-deep/70 to-transparent"></div>
-      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 80% 50%, rgb(206 42 45 / 0.18) 0%, transparent 65%);"></div>
+      <div class="absolute inset-0" style="background:
+        radial-gradient(at 20% 30%, rgb(45 79 44 / 0.55) 0%, transparent 55%),
+        radial-gradient(at 80% 50%, rgb(206 42 45 / 0.32) 0%, transparent 60%),
+        radial-gradient(at 50% 100%, rgb(28 58 111 / 0.5) 0%, transparent 60%),
+        linear-gradient(180deg, #0C2146 0%, #10182A 100%);"></div>
+      <!-- Decorative concentric wheel motif -->
+      <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full opacity-25" aria-hidden="true">
+        <g transform="translate(620 320)" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5">
+          <circle r="160"/><circle r="120"/><circle r="80"/><circle r="40"/>
+          <line x1="-160" y1="0" x2="160" y2="0"/>
+          <line x1="0" y1="-160" x2="0" y2="160"/>
+          <line x1="-113" y1="-113" x2="113" y2="113"/>
+          <line x1="-113" y1="113"  x2="113" y2="-113"/>
+        </g>
+      </svg>
       <div class="noise absolute inset-0"></div>
     </div>
 

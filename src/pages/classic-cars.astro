@@ -24,15 +24,26 @@ const PROCESS = [
 <Layout title={`Classic Cars — ${SITE.name}`} description="25+ years mixing paint for classic-car restoration projects. Cellulose, synthetic enamel and 2K acrylic systems — period-correct or modern equivalents.">
   <!-- Cinematic hero -->
   <section class="relative pt-20 pb-32 lg:pt-28 lg:pb-44 overflow-hidden bg-brand-blue-deep text-white">
-    <div class="absolute inset-0">
-      <img
-        src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1800&q=82&auto=format&fit=crop"
-        alt=""
-        class="w-full h-full object-cover opacity-55"
-        data-parallax="0.15"
-      />
-      <div class="absolute inset-0 bg-gradient-to-r from-brand-blue-deep via-brand-blue-deep/80 to-brand-blue-deep/40"></div>
-      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 80% 30%, rgb(206 42 45 / 0.22) 0%, transparent 60%);"></div>
+    <div class="absolute inset-0" aria-hidden="true">
+      <div class="absolute inset-0" style="background:
+        radial-gradient(at 18% 22%, rgb(45 79 44 / 0.55) 0%, transparent 55%),
+        radial-gradient(at 82% 70%, rgb(206 42 45 / 0.28) 0%, transparent 60%),
+        radial-gradient(at 50% 100%, rgb(28 58 111 / 0.45) 0%, transparent 60%),
+        linear-gradient(180deg, #0C2146 0%, #10182A 100%);"></div>
+      <!-- British Racing Green paint stroke -->
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full opacity-30" aria-hidden="true">
+        <path d="M 0,520 Q 300,420 600,500 T 1200,460 L 1200,700 L 0,700 Z" fill="rgba(45,79,44,0.7)"/>
+        <path d="M 0,560 Q 300,500 600,540 T 1200,520 L 1200,700 L 0,700 Z" fill="rgba(206,42,45,0.18)"/>
+      </svg>
+      <!-- Concentric wheel motif right -->
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full opacity-22" aria-hidden="true">
+        <g transform="translate(950 320)" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.5">
+          <circle r="220"/><circle r="170"/><circle r="120"/><circle r="70"/><circle r="22"/>
+          {[0,30,60,90,120,150].map((a) => (
+            <line transform={`rotate(${a})`} x1="-220" y1="0" x2="220" y2="0"/>
+          ))}
+        </g>
+      </svg>
       <div class="noise absolute inset-0"></div>
     </div>
     <div class="container-x relative">

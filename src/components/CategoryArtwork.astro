@@ -1,0 +1,154 @@
+---
+// Brand-on-message artwork per category — replaces all Unsplash imagery.
+// Each tile is a stylised paint-swatch: a solid colour-chip with a thematic
+// pattern, hex code badge, and a CCS monogram corner. Conceptually perfect for
+// a paint supplier (every product IS a colour).
+
+interface Props {
+  slug: string;
+  title: string;
+  count: string;
+  /** When true: render the wide/landscape variant used in cinematic spots. */
+  wide?: boolean;
+}
+const { slug, title, count, wide = false } = Astro.props;
+
+// One swatch palette per category — chosen to evoke the product on the shelf.
+const SWATCH: Record<string, { name: string; hex: string; bg: string; ink: 'white' | 'ink' }> = {
+  'car-paints':           { name: 'Pimento Red',         hex: '#CE2A2D', bg: '#CE2A2D',  ink: 'white' },
+  '2k-clear-coat':        { name: 'High Solids Clear',    hex: '#EFF3F7', bg: '#EFF3F7', ink: 'ink' },
+  '2k-primers':           { name: 'Grey Surfacer',        hex: '#6E7682', bg: '#6E7682', ink: 'white' },
+  'car-repair-filler':    { name: 'Body Filler Tan',      hex: '#C9A572', bg: '#C9A572', ink: 'ink' },
+  'touch-up-aerosols':    { name: 'Royal Navy',           hex: '#1C3A6F', bg: '#1C3A6F', ink: 'white' },
+  'classic-car':          { name: 'British Racing Green', hex: '#2D4F2C', bg: '#2D4F2C', ink: 'white' },
+  'tools-equipment':      { name: 'Workshop Ink',         hex: '#10182A', bg: '#10182A', ink: 'white' },
+};
+const s = SWATCH[slug] ?? SWATCH['car-paints'];
+const inkColour = s.ink === 'white' ? '#FFFFFF' : '#0F172A';
+const subtleInk = s.ink === 'white' ? 'rgb(255 255 255 / 0.68)' : 'rgb(15 23 42 / 0.62)';
+const muteInk   = s.ink === 'white' ? 'rgb(255 255 255 / 0.40)' : 'rgb(15 23 42 / 0.38)';
+const sheen     = s.ink === 'white' ? 'rgb(255 255 255 / 0.08)' : 'rgb(15 23 42 / 0.06)';
+
+const ratio = wide ? '21/9' : '4/3';
+---
+<div
+  class="category-artwork relative w-full overflow-hidden"
+  style={`aspect-ratio: ${ratio}; background-color: ${s.bg};`}
+  data-slug={slug}
+>
+  <!-- Subtle paint-stroke noise -->
+  <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full" aria-hidden="true">
+    <defs>
+      <pattern id={`grid-${slug}`} width="14" height="14" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.9" fill={muteInk}/>
+      </pattern>
+      <linearGradient id={`sheen-${slug}`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color={sheen} stop-opacity="0.85"/>
+        <stop offset="60%" stop-color={sheen} stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id={`fade-${slug}`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color={s.bg} stop-opacity="0"/>
+        <stop offset="100%" stop-color={s.bg} stop-opacity="0.45"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Top-left highlight sheen -->
+    <rect width="400" height="300" fill={`url(#sheen-${slug})`}/>
+    <!-- Faint dot grid -->
+    <rect width="400" height="300" fill={`url(#grid-${slug})`} opacity="0.55"/>
+    <!-- Bottom vignette -->
+    <rect width="400" height="300" fill={`url(#fade-${slug})`}/>
+
+    <!-- Decorative paint-stroke brushwork unique to each category -->
+    {slug === 'car-paints' && (
+      <g>
+        <rect x="40"  y="60"  width="44" height="160" rx="6" fill={sheen}/>
+        <rect x="100" y="80"  width="44" height="160" rx="6" fill={sheen} opacity="0.8"/>
+        <rect x="160" y="100" width="44" height="160" rx="6" fill={sheen} opacity="0.6"/>
+      </g>
+    )}
+    {slug === '2k-clear-coat' && (
+      <g>
+        <ellipse cx="320" cy="80"  rx="120" ry="40" fill={sheen} opacity="0.9"/>
+        <ellipse cx="120" cy="220" rx="160" ry="40" fill={sheen} opacity="0.7"/>
+      </g>
+    )}
+    {slug === '2k-primers' && (
+      <g>
+        <rect x="20"  y="40"  width="200" height="44" rx="3" fill={sheen}/>
+        <rect x="20"  y="110" width="160" height="44" rx="3" fill={sheen} opacity="0.85"/>
+        <rect x="20"  y="180" width="220" height="44" rx="3" fill={sheen} opacity="0.7"/>
+      </g>
+    )}
+    {slug === 'car-repair-filler' && (
+      <g>
+        <circle cx="320" cy="180" r="80" fill={sheen} opacity="0.85"/>
+        <circle cx="280" cy="100" r="40" fill={sheen} opacity="0.7"/>
+      </g>
+    )}
+    {slug === 'touch-up-aerosols' && (
+      <g>
+        {[...Array(40)].map((_, i) => (
+          <circle
+            cx={120 + ((i * 13) % 220)}
+            cy={60 + ((i * 17) % 200)}
+            r={1 + ((i * 5) % 5)}
+            fill={sheen}
+            opacity={0.5 + ((i % 3) * 0.15)}
+          />
+        ))}
+      </g>
+    )}
+    {slug === 'classic-car' && (
+      <g>
+        <circle cx="320" cy="150" r="100" fill="none" stroke={sheen} stroke-width="6"/>
+        <circle cx="320" cy="150" r="60"  fill="none" stroke={sheen} stroke-width="3"/>
+        <line x1="220" y1="150" x2="420" y2="150" stroke={sheen} stroke-width="3"/>
+        <line x1="320" y1="50"  x2="320" y2="250" stroke={sheen} stroke-width="3"/>
+      </g>
+    )}
+    {slug === 'tools-equipment' && (
+      <g>
+        <polygon points="120,80 200,80 240,150 200,220 120,220 80,150" fill="none" stroke={sheen} stroke-width="5"/>
+        <polygon points="240,40 320,40 360,110 320,180 240,180 200,110" fill="none" stroke={sheen} stroke-width="5"/>
+        <polygon points="280,170 340,170 370,220 340,270 280,270 250,220" fill="none" stroke={sheen} stroke-width="5"/>
+      </g>
+    )}
+  </svg>
+
+  <!-- Top bar: CCS monogram + count badge -->
+  <div class="absolute top-4 left-4 right-4 flex items-start justify-between" style={`color: ${inkColour};`}>
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-full bg-white grid place-items-center shadow-soft">
+        <span class="font-display font-bold text-[10px] tracking-tight text-brand-red">
+          C<span class="text-brand-blue">S</span>C
+        </span>
+      </div>
+      <span class="font-mono text-[11px] tracking-tight uppercase" style={`color: ${subtleInk};`}>
+        Ref. /{slug.replace(/-/g, '_').toUpperCase().slice(0, 14)}
+      </span>
+    </div>
+    <span class="font-mono text-[11px] tracking-tight bg-white/90 text-ink px-2.5 py-1 rounded-full">
+      {count}
+    </span>
+  </div>
+
+  <!-- Centre: category headline (big, editorial) -->
+  <div class="absolute inset-0 grid place-items-center px-6">
+    <p
+      class="font-display font-bold uppercase tracking-tight text-center leading-[0.92]"
+      style={`color: ${inkColour}; font-size: clamp(1.6rem, 5vw, 2.6rem); text-shadow: 0 2px 18px ${s.bg};`}
+    >
+      {title}
+    </p>
+  </div>
+
+  <!-- Bottom paint-chip label -->
+  <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between" style={`color: ${subtleInk};`}>
+    <div>
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em]">Swatch</p>
+      <p class="font-display font-semibold text-[12.5px] mt-0.5" style={`color: ${inkColour};`}>{s.name}</p>
+    </div>
+    <p class="font-mono text-[11px] uppercase tracking-tight">{s.hex}</p>
+  </div>
+</div>

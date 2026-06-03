@@ -1,20 +1,16 @@
 ---
 import Icon from './Icon.astro';
+import ProductArtwork from './ProductArtwork.astro';
 import type { Product } from '@/data/products';
 interface Props { product: Product; index?: number; }
 const { product: p, index = 0 } = Astro.props;
 ---
 <article class="card-lift group bg-snow border border-line rounded-3xl overflow-hidden reveal" data-delay={`${(index % 4) + 1}`}>
-  <div class="relative aspect-square bg-bone overflow-hidden">
-    <img
-      src={p.image}
-      alt={p.title}
-      loading="lazy"
-      class="w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.07]"
-    />
-    <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+  <div class="relative">
+    <ProductArtwork slug={p.slug} brand={p.brand} category={p.category} price={p.price} />
+    <div class="absolute top-3 right-3 flex flex-wrap gap-1.5 justify-end max-w-[60%]">
       {p.tags.map((t) => (
-        <span class="font-display uppercase text-[10px] tracking-wider bg-white/95 text-ink px-2 py-0.5 rounded-full backdrop-blur">{t}</span>
+        <span class="font-display uppercase text-[10px] tracking-wider bg-white/95 text-ink px-2 py-0.5 rounded-full backdrop-blur shadow-soft">{t}</span>
       ))}
     </div>
     <div class="absolute bottom-3 right-3 font-display font-semibold bg-brand-red text-white text-[14px] px-3 py-1.5 rounded-pill shadow-glow">{p.price}</div>
