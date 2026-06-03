@@ -58,9 +58,9 @@ const { compact = false } = Astro.props;
           <!-- Step 1: Vehicle -->
           <div data-step="1">
             <div class="grid sm:grid-cols-2 gap-4">
-              <div class="floating-field">
+              <div class="floating-field floating-field--select">
                 <select id="cm-make" name="make" required>
-                  <option value="">Select…</option>
+                  <option value="" disabled selected hidden></option>
                   {CAR_BRANDS.map((b) => <option value={b}>{b}</option>)}
                 </select>
                 <label for="cm-make">Make</label>
@@ -184,12 +184,12 @@ const { compact = false } = Astro.props;
     transition: transform .2s ease, font-size .2s ease, color .2s ease;
     background: transparent;
   }
-  .floating-field input:focus + label,
-  .floating-field select:focus + label,
-  .floating-field textarea:focus + label,
-  .floating-field input:not(:placeholder-shown) + label,
-  .floating-field select:valid + label,
-  .floating-field textarea:not(:placeholder-shown) + label {
+  .floating-field input:focus ~ label,
+  .floating-field select:focus ~ label,
+  .floating-field textarea:focus ~ label,
+  .floating-field input:not(:placeholder-shown) ~ label,
+  .floating-field textarea:not(:placeholder-shown) ~ label,
+  .floating-field--select select:not([data-empty="true"]) ~ label {
     transform: translateY(-0.65rem);
     font-size: 11px;
     color: rgb(var(--rgb-red));
@@ -197,6 +197,10 @@ const { compact = false } = Astro.props;
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
+  /* Select rest state: hide the empty default option text so the floating
+     label sits cleanly inside the field instead of overlapping a default
+     option label (which was reading as "Select…" beneath the "Make" label). */
+  .floating-field--select select[data-empty="true"] { color: transparent; }
   .floating-field select option { color: rgb(var(--rgb-ink)); }
 </style>
 
@@ -205,6 +209,15 @@ const { compact = false } = Astro.props;
   if (form) {
     const steps = Array.from(form.querySelectorAll<HTMLElement>('[data-step]'));
     const pills = Array.from(form.querySelectorAll<HTMLElement>('[data-step-pill]'));
+    // Mark selects as empty/filled so the floating label and the placeholder
+    // text don't both render at the same time.
+    const syncSelectEmpty = (sel: HTMLSelectElement) => {
+      sel.dataset.empty = sel.value === '' ? 'true' : 'false';
+    };
+    form.querySelectorAll<HTMLSelectElement>('select').forEach((sel) => {
+      syncSelectEmpty(sel);
+      sel.addEventListener('change', () => syncSelectEmpty(sel));
+    });
     let current = 1;
     function show(n: number | 'success') {
       steps.forEach((s) => (s.hidden = s.getAttribute('data-step') !== String(n)));
