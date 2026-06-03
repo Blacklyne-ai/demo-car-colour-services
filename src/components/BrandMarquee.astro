@@ -1,0 +1,50 @@
+---
+import { CAR_BRANDS } from '@/data/brands';
+import Icon from './Icon.astro';
+// Duplicate for seamless loop
+const ROW1 = CAR_BRANDS.slice(0, Math.ceil(CAR_BRANDS.length / 2));
+const ROW2 = CAR_BRANDS.slice(Math.ceil(CAR_BRANDS.length / 2));
+---
+<section class="relative py-24 lg:py-32 bg-snow border-y border-line overflow-hidden">
+  <div class="container-x">
+    <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 mb-10">
+      <div>
+        <p class="eyebrow eyebrow-blue reveal">Every Marque, Every Colour</p>
+        <h2 class="h-section mt-3 text-ink text-balance reveal" data-delay="1">
+          Matching paint for <span class="text-brand-blue">40<span class="text-brand-red">+</span></span> car brands.
+        </h2>
+      </div>
+      <p class="text-muted text-[15px] max-w-md leading-relaxed reveal" data-delay="2">
+        From a 1972 Lancia Fulvia to a brand-new Range Rover. Bring us a paint code, a number plate or a panel — we will mix it.
+      </p>
+    </div>
+  </div>
+
+  <!-- Marquee row 1 -->
+  <div class="marquee-mask overflow-hidden">
+    <div class="flex w-max animate-marquee py-4">
+      {[...ROW1, ...ROW1].map((b, i) => (
+        <span class={`group flex items-center gap-3 px-6 lg:px-8 font-display font-semibold uppercase tracking-wider text-[18px] lg:text-[22px] ${i % 4 === 0 ? 'text-brand-red' : i % 4 === 1 ? 'text-ink' : i % 4 === 2 ? 'text-brand-blue' : 'text-ink'}`}>
+          {b}
+          <span class="w-1.5 h-1.5 rounded-full bg-line group-hover:bg-brand-red transition"></span>
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <!-- Marquee row 2 (reverse) -->
+  <div class="marquee-mask overflow-hidden mt-2" style="--tw-translate-x: -25%;">
+    <div class="flex w-max animate-marquee-slow py-4" style="animation-direction: reverse;">
+      {[...ROW2, ...ROW2].map((b, i) => (
+        <span class={`group flex items-center gap-3 px-6 lg:px-8 font-display font-semibold uppercase tracking-wider text-[18px] lg:text-[22px] ${i % 4 === 0 ? 'text-brand-blue' : i % 4 === 1 ? 'text-ink' : i % 4 === 2 ? 'text-brand-red' : 'text-ink'}`}>
+          {b}
+          <span class="w-1.5 h-1.5 rounded-full bg-line group-hover:bg-brand-blue transition"></span>
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <div class="container-x mt-12 text-center reveal" data-delay="2">
+    <p class="text-muted">Your marque not listed? <a href="/contact" class="text-brand-red font-medium link-underline">Call the shop — we will source it.</a></p>
+  </div>
+</section>

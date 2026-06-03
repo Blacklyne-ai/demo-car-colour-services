@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 200" role="img" aria-label="Car Colour Services">
+  <!-- Monogram -->
+  <g transform="translate(0,0)">
+    <circle cx="100" cy="100" r="94" fill="#fff" stroke="#CE2A2D" stroke-width="3.5"/>
+    <circle cx="100" cy="100" r="82" fill="#fff" stroke="#1C3A6F" stroke-width="2.2"/>
+    <g font-family="'Cormorant Garamond', 'Times New Roman', Georgia, serif" font-weight="700" font-style="italic" text-anchor="middle">
+      <text x="46" y="140" font-size="110" fill="#CE2A2D">C</text>
+      <text x="100" y="144" font-size="114" fill="#1C3A6F">S</text>
+      <text x="154" y="140" font-size="110" fill="#CE2A2D">C</text>
+    </g>
+  </g>
+  <!-- Wordmark -->
+  <g font-family="'Oswald', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" letter-spacing="0.02em">
+    <text x="220" y="92" font-size="46" fill="#CE2A2D">CAR</text>
+    <text x="312" y="92" font-size="46" fill="#1C3A6F">COLOUR</text>
+    <text x="220" y="144" font-size="46" fill="#CE2A2D">SERVICES</text>
+  </g>
+</svg>

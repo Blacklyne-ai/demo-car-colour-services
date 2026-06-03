@@ -1,0 +1,62 @@
+---
+import { REFERRAL_AREAS } from '@/data/bodyshops';
+import Icon from './Icon.astro';
+---
+<div class="relative aspect-[4/3] lg:aspect-[16/11] rounded-3xl overflow-hidden border border-line bg-bone shadow-lift">
+  <!-- Stylised Essex map background -->
+  <svg viewBox="0 0 100 75" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full" aria-hidden="true">
+    <defs>
+      <pattern id="dotgrid" width="2" height="2" patternUnits="userSpaceOnUse">
+        <circle cx="0.5" cy="0.5" r="0.18" fill="rgb(28 58 111 / 0.15)"/>
+      </pattern>
+      <radialGradient id="mapGlow" cx="70%" cy="56%" r="40%">
+        <stop offset="0%" stop-color="rgb(206 42 45 / 0.10)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+    </defs>
+    <rect width="100" height="75" fill="rgb(245 244 240)"/>
+    <rect width="100" height="75" fill="url(#dotgrid)"/>
+    <rect width="100" height="75" fill="url(#mapGlow)"/>
+    <!-- Stylised Thames -->
+    <path d="M 0 68 Q 30 64 50 66 T 100 64 L 100 75 L 0 75 Z" fill="rgb(28 58 111 / 0.10)"/>
+    <text x="2" y="73" font-size="2.2" font-family="Inter" fill="rgb(28 58 111 / 0.55)">River Thames</text>
+    <!-- Compass -->
+    <g transform="translate(94 6)">
+      <circle cx="0" cy="0" r="3" fill="white" stroke="rgb(226 228 233)"/>
+      <path d="M 0 -2 L 1 0 L 0 2 L -1 0 Z" fill="rgb(206 42 45)"/>
+      <text x="0" y="-3.6" text-anchor="middle" font-size="1.8" font-family="Oswald" fill="rgb(15 23 42)">N</text>
+    </g>
+  </svg>
+
+  <!-- Pins -->
+  {REFERRAL_AREAS.map((a, i) => (
+    <button
+      type="button"
+      class="absolute -translate-x-1/2 -translate-y-1/2 group focus:outline-none"
+      style={`top: ${a.y}%; left: ${a.x}%;`}
+      aria-label={`Body-shop referrals in ${a.area}`}
+      data-pin={i}
+    >
+      <span class={`relative grid place-items-center w-7 h-7 lg:w-9 lg:h-9 rounded-full text-white shadow-lift transition-transform group-hover:scale-110 ${i === 0 ? 'bg-brand-red ring-4 ring-brand-red/20' : 'bg-brand-blue'}`}>
+        <Icon name="map-pin" size={14} />
+        {i === 0 && <span class="absolute inset-0 rounded-full bg-brand-red animate-ping opacity-30"></span>}
+      </span>
+      <span class={`absolute left-1/2 -translate-x-1/2 -bottom-7 whitespace-nowrap font-display uppercase tracking-wider text-[10px] ${i === 0 ? 'text-brand-red font-bold' : 'text-ink/75'}`}>
+        {a.area}
+      </span>
+      <!-- Hover card -->
+      <span class="opacity-0 group-hover:opacity-100 group-focus:opacity-100 absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full pointer-events-none transition-opacity duration-200 z-10">
+        <span class="block bg-snow border border-line rounded-xl shadow-lift p-3 w-56 text-left">
+          <span class="block font-display font-semibold text-[13px] text-ink">{a.area} <span class="font-mono text-[11px] text-muted ml-1">{a.postcode}</span></span>
+          <span class="block text-[12px] text-muted mt-1 leading-snug">{a.description}</span>
+        </span>
+      </span>
+    </button>
+  ))}
+
+  <!-- HQ label -->
+  <div class="absolute bottom-4 left-4 flex items-center gap-2 bg-snow/95 backdrop-blur border border-line rounded-full pl-2.5 pr-3.5 py-1.5">
+    <span class="status-dot is-open" aria-hidden="true"></span>
+    <span class="text-[11.5px] font-display uppercase tracking-wider text-ink">Romford HQ — Mixing Daily</span>
+  </div>
+</div>

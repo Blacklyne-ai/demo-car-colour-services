@@ -1,0 +1,129 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FloatingCTA from '@/components/FloatingCTA.astro';
+import { SITE } from '@/data/site';
+
+const BENEFITS = [
+  { i: 'gauge',    t: 'Trade pricing',       d: 'Volume tiers from individual tins to weekly bulk. Honest pricing, no rebate-driven targets.' },
+  { i: 'truck',    t: 'Same-day collection',  d: 'Pre-order by mid-morning, collect by close of business. Romford trade counter open six days.' },
+  { i: 'shield',   t: 'Technical advice',     d: 'Decades of bodyshop experience on call. Substrate, system, application support — included.' },
+  { i: 'beaker',   t: 'Custom mixing',        d: 'OEM-accurate colour matching for any vehicle. Bring a panel, a code or a number plate.' },
+  { i: 'history',  t: 'Stock replenishment',  d: 'Standing orders and consolidated weekly deliveries — keep your bench stocked without ordering.' },
+  { i: 'award',    t: 'Independent partner',  d: 'No manufacturer ties. The advice you get is the advice that fits your workflow.' },
+];
+---
+<Layout title={`Trade Account — ${SITE.name}`} description="Open a trade account with an independent paint supplier serving Essex and Greater London bodyshops since 1990.">
+  <!-- Hero -->
+  <section class="relative mesh-blue-dark text-white py-24 lg:py-36 overflow-hidden">
+    <div class="noise absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 rounded-full opacity-40" style="background: radial-gradient(circle, rgb(206 42 45 / 0.5) 0%, transparent 70%);"></div>
+
+    <div class="container-x relative grid lg:grid-cols-[1.4fr_1fr] gap-12 items-center">
+      <div>
+        <p class="eyebrow text-brand-red-soft reveal" style="--tw-text-opacity:1;">Trade Account · Bodyshops &amp; Fleet</p>
+        <h1 class="h-display mt-5 text-white text-balance reveal" data-delay="1">
+          The supplier your shop<br/>
+          <span class="text-brand-red-soft">deserves</span>.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-white/80 leading-relaxed text-pretty reveal" data-delay="2">
+          Independent. No rebate targets. Same family running the shop since 1990. Open a trade account and put us to work.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-8 reveal" data-delay="3">
+          <a href="#apply" class="btn-primary"><Icon name="building" size={15} /><span>Apply for a Trade Account</span></a>
+          <a href={`tel:${SITE.phoneTel}`} class="btn-secondary !text-white !bg-white/10 !border-white/15 hover:!bg-white/15"><Icon name="phone" size={15} /><span>Speak to the Trade Counter</span></a>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-3xl p-7 bg-white/8 border-white/12 backdrop-blur-xl reveal" data-delay="3">
+        <p class="eyebrow text-brand-red-soft" style="--tw-text-opacity:1;">Already a Trade Customer?</p>
+        <p class="mt-3 text-[15px] text-white/85 leading-relaxed">Login is coming soon. Until then, call the trade counter directly:</p>
+        <a href={`tel:${SITE.phoneTel}`} class="mt-5 flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/15">
+          <span class="w-11 h-11 rounded-full bg-brand-red grid place-items-center"><Icon name="phone" size={17} /></span>
+          <div>
+            <p class="text-[11px] uppercase tracking-wider text-white/60 font-display">Trade direct</p>
+            <p class="font-display font-semibold text-[16px]">{SITE.phone}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits grid -->
+  <section class="py-24 lg:py-32 bg-snow">
+    <div class="container-x">
+      <div class="max-w-3xl mb-14">
+        <p class="eyebrow reveal">Why Open a Trade Account</p>
+        <h2 class="h-section mt-4 text-balance reveal" data-delay="1">Built for the way<br/><span class="text-brand-red">bodyshops actually work</span>.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-7">
+        {BENEFITS.map((b, i) => (
+          <div class="card-lift bg-bone rounded-3xl p-7 lg:p-8 border border-line reveal" data-delay={`${(i % 4) + 1}`}>
+            <span class={`w-12 h-12 rounded-2xl ${i % 2 === 0 ? 'bg-brand-red text-white' : 'bg-brand-blue text-white'} grid place-items-center`}><Icon name={b.i as any} size={20} /></span>
+            <h3 class="h-card mt-5 text-ink">{b.t}</h3>
+            <p class="mt-3 text-[14.5px] text-muted leading-relaxed">{b.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Apply form -->
+  <section id="apply" class="py-24 lg:py-32 bg-bone">
+    <div class="container-x grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-16">
+      <div>
+        <p class="eyebrow eyebrow-blue reveal">Apply</p>
+        <h2 class="h-section mt-4 text-balance reveal" data-delay="1">Five minutes. <span class="text-brand-blue">Zero forms</span> in triplicate.</h2>
+        <p class="mt-5 text-muted text-[15.5px] leading-relaxed reveal" data-delay="2">Fill in the basics. A member of the trade team will call back within one business day to discuss volumes, delivery and pricing.</p>
+        <ul class="mt-8 space-y-3 reveal" data-delay="3">
+          {['Same-day account decision','30-day terms available subject to status','Free delivery within Romford / RM postcodes','Account manager on call'].map((b) => (
+            <li class="flex items-start gap-3 text-[14px] text-ink/85">
+              <span class="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-brand-red/10 text-brand-red grid place-items-center"><Icon name="check" size={12} /></span>
+              {b}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <form id="trade-form" class="reveal" data-delay="2" novalidate>
+        <div class="glass-card rounded-3xl p-7 lg:p-9 shadow-lift">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="floating-field"><input id="t-business" type="text" placeholder=" " required /><label for="t-business">Business name</label></div>
+            <div class="floating-field"><input id="t-type" type="text" placeholder=" " /><label for="t-type">Business type (Bodyshop, Fleet, …)</label></div>
+            <div class="floating-field"><input id="t-name" type="text" placeholder=" " required /><label for="t-name">Contact name</label></div>
+            <div class="floating-field"><input id="t-position" type="text" placeholder=" " /><label for="t-position">Position</label></div>
+            <div class="floating-field"><input id="t-phone" type="tel" placeholder=" " required /><label for="t-phone">Phone</label></div>
+            <div class="floating-field"><input id="t-email" type="email" placeholder=" " required /><label for="t-email">Email</label></div>
+            <div class="floating-field sm:col-span-2"><input id="t-postcode" type="text" placeholder=" " /><label for="t-postcode">Business postcode</label></div>
+            <div class="floating-field sm:col-span-2"><input id="t-volume" type="text" placeholder=" " /><label for="t-volume">Estimated monthly spend (£)</label></div>
+            <div class="floating-field sm:col-span-2"><input id="t-companies" type="text" placeholder=" " /><label for="t-companies">Companies House number (if Ltd)</label></div>
+            <div class="floating-field sm:col-span-2"><input id="t-vat" type="text" placeholder=" " /><label for="t-vat">VAT number (if registered)</label></div>
+            <div class="floating-field sm:col-span-2"><textarea id="t-notes" rows="3" placeholder=" "></textarea><label for="t-notes">Notes (brands used, paint systems, delivery needs)</label></div>
+          </div>
+          <p class="mt-5 text-[12px] text-muted">By submitting you agree to our <a href="/privacy" class="text-brand-red link-underline">privacy policy</a>. We will only use this to process your account application.</p>
+          <div class="mt-6 flex justify-end">
+            <button type="submit" class="btn-primary"><Icon name="shield" size={15} /><span>Submit Application</span><Icon name="arrow-right" class="arrow" size={15} /></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <CtaBand />
+  <FloatingCTA />
+</Layout>
+<script>
+  document.getElementById('trade-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = e.target as HTMLFormElement;
+    f.querySelector('.glass-card')!.innerHTML = `
+      <div class="text-center py-10">
+        <div class="w-16 h-16 mx-auto rounded-full bg-brand-red/10 text-brand-red grid place-items-center mb-5">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-display font-bold text-2xl text-ink">Application received.</p>
+        <p class="mt-2 text-muted">We will be in touch within one business day to confirm the next step.</p>
+      </div>`;
+  });
+</script>

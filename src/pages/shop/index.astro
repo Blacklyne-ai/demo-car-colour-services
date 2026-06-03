@@ -1,0 +1,121 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import CategoryCard from '@/components/CategoryCard.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FloatingCTA from '@/components/FloatingCTA.astro';
+import { CATEGORIES } from '@/data/categories';
+import { FEATURED_PRODUCTS } from '@/data/products';
+import { SITE } from '@/data/site';
+---
+<Layout title={`Shop — ${SITE.name}`} description={`${SITE.productCount}+ product lines across paints, clear-coats, primers, fillers, aerosols, classic systems and tools.`}>
+  <!-- Shop hero with instant search -->
+  <section class="relative pt-20 pb-12 lg:pt-28 lg:pb-16 mesh-bone overflow-hidden">
+    <div class="container-x">
+      <p class="eyebrow reveal">The Catalogue</p>
+      <h1 class="h-display mt-5 text-ink text-balance max-w-4xl reveal" data-delay="1">
+        Six hundred lines.<br/>
+        <span class="text-brand-red">Seven categories</span>.<br/>
+        One mixing room.
+      </h1>
+      <!-- Search bar -->
+      <div id="search" class="mt-10 lg:mt-12 max-w-3xl reveal" data-delay="2">
+        <label class="block">
+          <span class="sr-only">Search the catalogue</span>
+          <div class="relative">
+            <Icon name="search" size={20} class="absolute left-5 top-1/2 -translate-y-1/2 text-muted" />
+            <input
+              id="shop-search"
+              type="search"
+              autocomplete="off"
+              placeholder="Search paints, clear-coats, fillers, brands…"
+              class="w-full bg-snow border border-line rounded-pill pl-14 pr-32 py-5 text-[16px] text-ink shadow-soft focus:outline-none focus:border-brand-red focus:shadow-glow transition"
+            />
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 btn-primary !py-2.5 !px-5 !text-[12px]">
+              <span>Search</span>
+              <Icon name="arrow-right" class="arrow" size={13} />
+            </button>
+          </div>
+        </label>
+        <div class="mt-3 flex flex-wrap gap-2 text-[12.5px]">
+          <span class="text-muted">Popular:</span>
+          {['Cellulose', '2K Clearcoat', 'Aerosols', 'Norton Abrasives', 'SATA Spray Gun', 'Pimento Red'].map((t) => (
+            <a href="#" class="text-brand-blue hover:underline">{t}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter chips -->
+  <section class="py-12 lg:py-16 bg-snow border-b border-line">
+    <div class="container-x">
+      <div class="flex flex-wrap items-center gap-2 lg:gap-3">
+        <span class="font-display uppercase text-[11px] tracking-wider text-muted mr-2">Filter by:</span>
+        <button class="filter-chip is-active" data-filter="all">All Categories</button>
+        {CATEGORIES.map((c) => (
+          <a href={`/shop/${c.slug}`} class="filter-chip">{c.title}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Category grid -->
+  <section class="py-20 lg:py-28 bg-snow">
+    <div class="container-x">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-7">
+        {CATEGORIES.map((c, i) => <CategoryCard category={c} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured products -->
+  <section class="py-20 lg:py-28 bg-bone">
+    <div class="container-x">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-10">
+        <div>
+          <p class="eyebrow eyebrow-blue reveal">Trade Picks</p>
+          <h2 class="h-section mt-3 text-balance reveal" data-delay="1">This month at the <span class="text-brand-blue">trade counter</span>.</h2>
+        </div>
+        <p class="text-muted text-[14px] max-w-sm reveal" data-delay="2">Hand-selected by the team for finish, speed and reliability.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+        {FEATURED_PRODUCTS.map((p, i) => <ProductCard product={p} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- E-commerce note -->
+  <section class="py-16 bg-snow">
+    <div class="container-x max-w-3xl text-center">
+      <p class="eyebrow eyebrow-blue reveal">Online Ordering</p>
+      <h2 class="mt-4 font-display font-semibold text-2xl lg:text-3xl text-ink text-balance reveal" data-delay="1">
+        Full online checkout coming soon. Until then — call the shop or use the <a href="/colour-matching" class="text-brand-red link-underline">colour-match form</a>.
+      </h2>
+      <p class="mt-4 text-muted text-[14.5px] reveal" data-delay="2">Trade customers, ring the trade counter direct on <a href={`tel:${SITE.phoneTel}`} class="text-brand-red font-medium">{SITE.phone}</a> for same-day collection.</p>
+    </div>
+  </section>
+
+  <CtaBand />
+  <FloatingCTA />
+</Layout>
+
+<style is:global>
+  .filter-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgb(var(--rgb-line) / 0.6);
+    color: rgb(var(--rgb-ink) / 0.78);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .filter-chip:hover { background: rgb(var(--rgb-bone)); border-color: rgb(var(--rgb-line)); color: rgb(var(--rgb-ink)); }
+  .filter-chip.is-active { background: rgb(var(--rgb-red)); color: white; }
+</style>

@@ -1,0 +1,72 @@
+---
+import { SITE } from '@/data/site';
+import { REVIEWS_META } from '@/data/reviews';
+
+interface Props {
+  type?: 'LocalBusiness' | 'AutoPartsStore' | 'WebPage';
+  pageTitle?: string;
+  pageUrl?: string;
+}
+const { type = 'AutoPartsStore', pageTitle, pageUrl } = Astro.props;
+
+const open = SITE.hours
+  .filter((h) => h.open && h.close)
+  .map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: `https://schema.org/${
+      ({ Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' } as Record<string, string>)[h.day]
+    }`,
+    opens: h.open,
+    closes: h.close,
+  }));
+
+const businessLd = {
+  '@context': 'https://schema.org',
+  '@type': ['AutoPartsStore', 'LocalBusiness'],
+  '@id': `${SITE.url}/#business`,
+  name: SITE.legalName,
+  alternateName: SITE.name,
+  url: SITE.url,
+  telephone: SITE.phone,
+  email: SITE.email,
+  description:
+    'Independent automotive paint and refinish supplier in Romford, Essex. Mixing colour for trade bodyshops, classic restorers and private motorists across the South East since 1990.',
+  foundingDate: `${SITE.founded}`,
+  image: `${SITE.url}/shopfront-hero.jpg`,
+  logo: `${SITE.url}/logo-mark.svg`,
+  priceRange: '££',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.city,
+    addressRegion: SITE.address.county,
+    postalCode: SITE.address.postcode,
+    addressCountry: 'GB',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lng },
+  openingHoursSpecification: open,
+  sameAs: [SITE.social.facebook, SITE.social.linkedin],
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: REVIEWS_META.aggregateRating,
+    reviewCount: REVIEWS_META.reviewCount,
+  },
+  areaServed: [
+    { '@type': 'AdministrativeArea', name: 'Essex' },
+    { '@type': 'AdministrativeArea', name: 'Greater London' },
+    { '@type': 'AdministrativeArea', name: 'South East England' },
+  ],
+};
+
+const webPageLd = pageTitle
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: pageTitle,
+      url: pageUrl || SITE.url,
+      isPartOf: { '@id': `${SITE.url}/#business` },
+    }
+  : null;
+---
+<script type="application/ld+json" set:html={JSON.stringify(businessLd)}></script>
+{webPageLd && <script type="application/ld+json" set:html={JSON.stringify(webPageLd)}></script>}

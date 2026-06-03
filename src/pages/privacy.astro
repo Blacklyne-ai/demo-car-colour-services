@@ -1,0 +1,63 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import { SITE } from '@/data/site';
+const updated = '2026-06-01';
+---
+<Layout title={`Privacy Policy — ${SITE.name}`} description={`How ${SITE.legalName} handles your personal data under UK GDPR.`}>
+  <article class="py-20 lg:py-28 bg-snow">
+    <div class="container-x max-w-3xl">
+      <p class="eyebrow">Legal</p>
+      <h1 class="h-section mt-4 text-balance">Privacy Policy</h1>
+      <p class="mt-3 text-[13px] text-muted font-mono">Last updated: {new Date(updated).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+
+      <div class="prose-editorial mt-12 space-y-6 text-ink/85 text-[15.5px] leading-[1.75]">
+        <h2 class="h-card mt-8">Who we are</h2>
+        <p>{SITE.legalName} (Companies House #{SITE.companiesHouseNumber}), {SITE.address.street}, {SITE.address.city}, {SITE.address.county} {SITE.address.postcode}. We are the data controller for personal information collected through this website.</p>
+
+        <h2 class="h-card mt-8">What we collect</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Enquiry data</strong> — name, contact details, vehicle details, and any messages you send through the colour-matching form, trade-account form or contact form.</li>
+          <li><strong>Analytics data</strong> — anonymised page-view information collected by privacy-respecting analytics.</li>
+          <li><strong>Essential cookies</strong> — only what is required for the site to function.</li>
+        </ul>
+
+        <h2 class="h-card mt-8">How we use it</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>To respond to your enquiry and quote, mix, supply or refer accordingly.</li>
+          <li>To process trade-account applications.</li>
+          <li>To improve the website experience.</li>
+        </ul>
+
+        <h2 class="h-card mt-8">Lawful basis</h2>
+        <p>We process your data under <em>legitimate interest</em> (to respond to your enquiry) and <em>contract</em> (to fulfil trade orders). Marketing communications are sent only with your explicit consent.</p>
+
+        <h2 class="h-card mt-8">Retention</h2>
+        <p>Enquiry data is retained for 24 months unless an active trading relationship exists. Trade-account data is retained for the duration of the relationship plus statutory record-keeping periods.</p>
+
+        <h2 class="h-card mt-8">Your rights (UK GDPR)</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Right to access — request a copy of your data.</li>
+          <li>Right to rectification — correct inaccurate data.</li>
+          <li>Right to erasure — request deletion (subject to legal obligations).</li>
+          <li>Right to object — withdraw consent at any time.</li>
+        </ul>
+        <p>To exercise any right, email <a href={`mailto:${SITE.email}`} class="text-brand-red link-underline">{SITE.email}</a>. You may also complain to the Information Commissioner's Office at <a href="https://ico.org.uk" target="_blank" rel="noopener" class="text-brand-blue link-underline">ico.org.uk</a>.</p>
+
+        <h2 class="h-card mt-8">Third parties</h2>
+        <p>We share data only with service providers necessary to deliver your enquiry or order (e.g. couriers for posted aerosols). We never sell personal data.</p>
+
+        <h2 class="h-card mt-8">Safety information (COSHH)</h2>
+        <p>Automotive paint products are governed by COSHH regulations. We provide Safety Data Sheets for all relevant products on request at <a href={`mailto:${SITE.email}`} class="text-brand-red link-underline">{SITE.email}</a> or in-store.</p>
+      </div>
+
+      <div class="mt-14 p-6 rounded-2xl bg-bone border border-line flex items-start gap-4">
+        <span class="flex-shrink-0 w-11 h-11 rounded-xl bg-brand-blue text-white grid place-items-center"><Icon name="lock" size={18} /></span>
+        <div>
+          <p class="font-display font-semibold text-ink">Questions about your data?</p>
+          <p class="text-[14px] text-muted mt-1">Email <a href={`mailto:${SITE.email}`} class="text-brand-red link-underline">{SITE.email}</a> or call <a href={`tel:${SITE.phoneTel}`} class="text-brand-red link-underline">{SITE.phone}</a>.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+</Layout>

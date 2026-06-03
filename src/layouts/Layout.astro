@@ -1,0 +1,131 @@
+---
+import '@/styles/global.css';
+import { SITE } from '@/data/site';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import CookieBanner from '@/components/CookieBanner.astro';
+import SchemaOrg from '@/components/SchemaOrg.astro';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noFooterPad?: boolean;
+}
+const {
+  title = `${SITE.name} — Automotive Paint Specialists since ${SITE.founded}`,
+  description = `Independent paint supplier in Romford, Essex. Mixing the right colour for trade bodyshops, classic restorers and private motorists across the South East since ${SITE.founded}.`,
+  ogImage = '/shopfront-hero.jpg',
+} = Astro.props;
+
+const url = new URL(Astro.url.pathname, SITE.url).toString();
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#CE2A2D" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo-mark.svg" />
+    <link rel="canonical" href={url} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={new URL(ogImage, SITE.url).toString()} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <SchemaOrg pageTitle={title} pageUrl={url} />
+    <ClientRouter fallback="swap" />
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only fixed top-3 left-3 z-[100] btn-primary !py-2 !px-4 !text-[12px]">Skip to content</a>
+    <Header />
+    <main id="main" class="pt-24">
+      <slot />
+    </main>
+    <Footer />
+    <CookieBanner />
+
+    <script>
+      // ── Scroll-reveal observer ──
+      const observe = () => {
+        const items = document.querySelectorAll<HTMLElement>('.reveal');
+        if (!('IntersectionObserver' in window)) {
+          items.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+          }
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+        items.forEach((el) => io.observe(el));
+      };
+      observe();
+      document.addEventListener('astro:page-load', observe);
+
+      // ── Counter animations ──
+      const animateCounters = () => {
+        const els = document.querySelectorAll<HTMLElement>('[data-counter]');
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            const el = e.target as HTMLElement;
+            const target = parseFloat(el.dataset.counter || '0');
+            const duration = 1600;
+            const start = performance.now();
+            const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+            function step(now: number) {
+              const t = Math.min((now - start) / duration, 1);
+              const v = target * ease(t);
+              el.textContent = target % 1 === 0
+                ? Math.round(v).toString()
+                : v.toFixed(1);
+              if (t < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+            io.unobserve(el);
+          }
+        }, { threshold: 0.4 });
+        els.forEach((el) => io.observe(el));
+      };
+      animateCounters();
+      document.addEventListener('astro:page-load', animateCounters);
+
+      // ── Subtle parallax on [data-parallax] elements (desktop only) ──
+      const initParallax = () => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.innerWidth < 1024) return;
+        const els = document.querySelectorAll<HTMLElement>('[data-parallax]');
+        if (!els.length) return;
+        function onScroll() {
+          const y = window.scrollY;
+          els.forEach((el) => {
+            const speed = parseFloat(el.dataset.parallax || '0.15');
+            const rect = el.getBoundingClientRect();
+            const offset = (rect.top + y - window.innerHeight) * speed;
+            el.style.transform = `translate3d(0, ${(-offset * 0.05).toFixed(1)}px, 0)`;
+          });
+        }
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      };
+      initParallax();
+      document.addEventListener('astro:page-load', initParallax);
+    </script>
+  </body>
+</html>

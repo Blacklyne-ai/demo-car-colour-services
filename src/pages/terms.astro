@@ -1,0 +1,49 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import { SITE } from '@/data/site';
+const updated = '2026-06-01';
+---
+<Layout title={`Terms — ${SITE.name}`} description={`Terms and conditions for ${SITE.legalName}.`}>
+  <article class="py-20 lg:py-28 bg-snow">
+    <div class="container-x max-w-3xl">
+      <p class="eyebrow">Legal</p>
+      <h1 class="h-section mt-4 text-balance">Terms &amp; Conditions</h1>
+      <p class="mt-3 text-[13px] text-muted font-mono">Last updated: {new Date(updated).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+
+      <div class="prose-editorial mt-12 space-y-6 text-ink/85 text-[15.5px] leading-[1.75]">
+        <h2 class="h-card mt-8">1. Who we are</h2>
+        <p>{SITE.legalName} (Companies House #{SITE.companiesHouseNumber}), trading as Car Colour Services, of {SITE.address.street}, {SITE.address.city}, {SITE.address.county} {SITE.address.postcode}.</p>
+
+        <h2 class="h-card mt-8">2. Products</h2>
+        <p>Product descriptions, sizes and prices on this website are provided as a guide and may vary at point of sale. Confirmation of price and availability is provided when you order — by phone, email or in person.</p>
+
+        <h2 class="h-card mt-8">3. Use of automotive paint</h2>
+        <p>Automotive paint products are intended for use by qualified individuals familiar with paint application, ventilation, PPE and disposal. We supply Safety Data Sheets (COSHH) on request. We accept no liability for misuse.</p>
+
+        <h2 class="h-card mt-8">4. Colour matching</h2>
+        <p>While we mix to the highest practical accuracy using OEM references, slight variation is inherent to all paint matching due to substrate, age, application and lighting. Where possible, we recommend test panels before full application.</p>
+
+        <h2 class="h-card mt-8">5. Trade accounts</h2>
+        <p>Trade accounts are subject to credit approval. Payment terms, returns and dispute resolution are governed by the trade-account agreement issued on application.</p>
+
+        <h2 class="h-card mt-8">6. Returns</h2>
+        <p>Custom-mixed and aerosol-to-order items are non-returnable. Unopened stock items may be returned within 14 days in original condition, subject to a re-stocking fee.</p>
+
+        <h2 class="h-card mt-8">7. Limitation of liability</h2>
+        <p>To the maximum extent permitted by law, our liability is limited to the value of the product supplied. We do not exclude liability for death, personal injury or fraud.</p>
+
+        <h2 class="h-card mt-8">8. Governing law</h2>
+        <p>These terms are governed by the laws of England and Wales.</p>
+      </div>
+
+      <div class="mt-14 p-6 rounded-2xl bg-bone border border-line flex items-start gap-4">
+        <span class="flex-shrink-0 w-11 h-11 rounded-xl bg-brand-red text-white grid place-items-center"><Icon name="file-text" size={18} /></span>
+        <div>
+          <p class="font-display font-semibold text-ink">Need clarification on these terms?</p>
+          <p class="text-[14px] text-muted mt-1">Call <a href={`tel:${SITE.phoneTel}`} class="text-brand-red link-underline">{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`} class="text-brand-red link-underline">{SITE.email}</a>.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+</Layout>

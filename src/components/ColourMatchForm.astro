@@ -1,0 +1,235 @@
+---
+import { CAR_BRANDS } from '@/data/brands';
+import Icon from './Icon.astro';
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+<section class={`relative ${compact ? 'py-20' : 'py-24 lg:py-32'} overflow-hidden`}>
+  <!-- Atmospheric layered gradient -->
+  <div class="absolute inset-0 mesh-bone" aria-hidden="true"></div>
+  <div class="absolute inset-0 pointer-events-none opacity-60" aria-hidden="true"
+       style="background: radial-gradient(60% 50% at 50% 0%, rgb(206 42 45 / 0.06) 0%, transparent 70%);"></div>
+
+  <div class="container-x relative">
+    <div class="grid lg:grid-cols-[1.1fr_1.6fr] gap-12 lg:gap-16 items-start">
+      <div>
+        <p class="eyebrow reveal">Colour Match</p>
+        <h2 class="h-section mt-4 text-ink text-balance reveal" data-delay="1">
+          Find your paint code<br/>in <span class="text-brand-red">three steps</span>.
+        </h2>
+        <p class="mt-5 text-muted text-pretty leading-relaxed text-[15.5px] reveal" data-delay="2">
+          Tell us the marque, give us a plate or a code, and we will mix the exact colour — aerosol, tin or trade-volume — usually within the hour.
+        </p>
+
+        <ul class="mt-8 grid gap-3.5 reveal" data-delay="3">
+          {[
+            { icon: 'check', label: 'OEM-accurate match on solid, metallic, pearl and xirallic' },
+            { icon: 'check', label: 'Aerosols made-to-order — collect or post next day' },
+            { icon: 'check', label: 'Trade volumes available — call for bulk pricing' },
+          ].map((b) => (
+            <li class="flex items-start gap-3">
+              <span class="flex-shrink-0 mt-0.5 w-6 h-6 rounded-full bg-brand-red/10 text-brand-red grid place-items-center">
+                <Icon name="check" size={14} />
+              </span>
+              <span class="text-[14.5px] text-ink/85">{b.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Multi-step form -->
+      <form id="colour-match" class="reveal" data-delay="2" novalidate>
+        <div class="glass-card rounded-3xl p-7 lg:p-9 shadow-lift">
+          <!-- Step indicator -->
+          <ol class="flex items-center justify-between mb-8 gap-2" aria-label="Form steps">
+            {[1,2,3].map((n) => (
+              <li class="flex items-center gap-2 flex-1" data-step-pill={n}>
+                <span class={`w-8 h-8 rounded-full grid place-items-center font-display font-bold text-[13px] transition-colors ${n === 1 ? 'bg-brand-red text-white' : 'bg-ink/8 text-ink/60'}`} data-step-num>0{n}</span>
+                <span class={`text-[12px] font-display uppercase tracking-wider transition-colors ${n === 1 ? 'text-ink' : 'text-muted'}`} data-step-label>
+                  {n === 1 ? 'Vehicle' : n === 2 ? 'Identifier' : 'Contact'}
+                </span>
+                {n < 3 && <span class="flex-1 h-px bg-line"></span>}
+              </li>
+            ))}
+          </ol>
+
+          <!-- Step 1: Vehicle -->
+          <div data-step="1">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="floating-field">
+                <select id="cm-make" name="make" required>
+                  <option value="">Select…</option>
+                  {CAR_BRANDS.map((b) => <option value={b}>{b}</option>)}
+                </select>
+                <label for="cm-make">Make</label>
+              </div>
+              <div class="floating-field">
+                <input id="cm-model" type="text" name="model" placeholder=" " required autocomplete="off" />
+                <label for="cm-model">Model (e.g. A4 Avant)</label>
+              </div>
+              <div class="floating-field">
+                <input id="cm-year" type="text" name="year" placeholder=" " inputmode="numeric" maxlength="4" pattern="[0-9]{4}" />
+                <label for="cm-year">Year (optional)</label>
+              </div>
+              <div class="floating-field">
+                <input id="cm-colour" type="text" name="colourName" placeholder=" " />
+                <label for="cm-colour">Colour name (if known)</label>
+              </div>
+            </div>
+            <div class="mt-7 flex justify-end">
+              <button type="button" data-next class="btn-primary"><span>Continue</span><Icon name="arrow-right" class="arrow" size={15} /></button>
+            </div>
+          </div>
+
+          <!-- Step 2: Identifier -->
+          <div data-step="2" hidden>
+            <p class="text-[13.5px] text-muted mb-5">Give us one — the more accurate, the faster we mix.</p>
+            <div class="grid gap-4">
+              <div class="floating-field">
+                <input id="cm-plate" type="text" name="plate" placeholder=" " maxlength="8" style="text-transform:uppercase;" />
+                <label for="cm-plate">Number plate (UK)</label>
+              </div>
+              <div class="floating-field">
+                <input id="cm-code" type="text" name="paintCode" placeholder=" " />
+                <label for="cm-code">Paint code (manufacturer)</label>
+              </div>
+              <div class="floating-field">
+                <textarea id="cm-notes" name="notes" placeholder=" " rows="3"></textarea>
+                <label for="cm-notes">Notes (panel, area, finish)</label>
+              </div>
+            </div>
+            <div class="mt-7 flex items-center justify-between gap-3">
+              <button type="button" data-back class="btn-ghost"><Icon name="arrow-right" size={15} class="rotate-180" /><span>Back</span></button>
+              <button type="button" data-next class="btn-primary"><span>Continue</span><Icon name="arrow-right" class="arrow" size={15} /></button>
+            </div>
+          </div>
+
+          <!-- Step 3: Contact -->
+          <div data-step="3" hidden>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="floating-field">
+                <input id="cm-name" type="text" name="name" placeholder=" " required />
+                <label for="cm-name">Your name</label>
+              </div>
+              <div class="floating-field">
+                <input id="cm-phone" type="tel" name="phone" placeholder=" " required />
+                <label for="cm-phone">Phone</label>
+              </div>
+              <div class="floating-field sm:col-span-2">
+                <input id="cm-email" type="email" name="email" placeholder=" " required />
+                <label for="cm-email">Email</label>
+              </div>
+              <div class="floating-field sm:col-span-2">
+                <div class="flex items-center gap-3 text-[13px] text-muted">
+                  <input id="cm-trade" type="checkbox" name="trade" class="accent-brand-red w-4 h-4" />
+                  <label for="cm-trade">I'm a trade customer (bodyshop / fleet)</label>
+                </div>
+              </div>
+            </div>
+            <div class="mt-7 flex items-center justify-between gap-3">
+              <button type="button" data-back class="btn-ghost"><Icon name="arrow-right" size={15} class="rotate-180" /><span>Back</span></button>
+              <button type="submit" class="btn-primary"><Icon name="palette" size={15} /><span>Find My Colour</span></button>
+            </div>
+          </div>
+
+          <!-- Success state -->
+          <div data-step="success" hidden class="text-center py-8">
+            <div class="w-16 h-16 mx-auto rounded-full bg-brand-red/10 text-brand-red grid place-items-center mb-4">
+              <Icon name="check" size={32} />
+            </div>
+            <p class="font-display font-bold text-2xl text-ink">Mix request received.</p>
+            <p class="mt-2 text-muted">A member of the team will call you back within one business hour during shop hours.</p>
+            <button type="button" data-reset class="mt-6 btn-secondary">Start another</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .floating-field {
+    position: relative;
+  }
+  .floating-field input,
+  .floating-field select,
+  .floating-field textarea {
+    width: 100%;
+    background: rgb(255 255 255 / 0.9);
+    border: 1px solid rgb(var(--rgb-line));
+    border-radius: 14px;
+    padding: 1.35rem 1rem 0.55rem;
+    font-size: 15px;
+    color: rgb(var(--rgb-ink));
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .floating-field textarea { padding-top: 1.35rem; resize: vertical; }
+  .floating-field select { appearance: none; padding-right: 2.4rem; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23525F74' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 1rem center; }
+  .floating-field input:focus,
+  .floating-field select:focus,
+  .floating-field textarea:focus {
+    outline: none;
+    border-color: rgb(var(--rgb-red));
+    box-shadow: 0 0 0 4px rgb(var(--rgb-red) / 0.10);
+  }
+  .floating-field label {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 14px;
+    color: rgb(var(--rgb-muted));
+    pointer-events: none;
+    transition: transform .2s ease, font-size .2s ease, color .2s ease;
+    background: transparent;
+  }
+  .floating-field input:focus + label,
+  .floating-field select:focus + label,
+  .floating-field textarea:focus + label,
+  .floating-field input:not(:placeholder-shown) + label,
+  .floating-field select:valid + label,
+  .floating-field textarea:not(:placeholder-shown) + label {
+    transform: translateY(-0.65rem);
+    font-size: 11px;
+    color: rgb(var(--rgb-red));
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .floating-field select option { color: rgb(var(--rgb-ink)); }
+</style>
+
+<script>
+  const form = document.getElementById('colour-match');
+  if (form) {
+    const steps = Array.from(form.querySelectorAll<HTMLElement>('[data-step]'));
+    const pills = Array.from(form.querySelectorAll<HTMLElement>('[data-step-pill]'));
+    let current = 1;
+    function show(n: number | 'success') {
+      steps.forEach((s) => (s.hidden = s.getAttribute('data-step') !== String(n)));
+      if (typeof n === 'number') {
+        pills.forEach((p) => {
+          const k = Number(p.getAttribute('data-step-pill'));
+          const num = p.querySelector<HTMLElement>('[data-step-num]');
+          const label = p.querySelector<HTMLElement>('[data-step-label]');
+          if (k < n && num) { num.className = 'w-8 h-8 rounded-full grid place-items-center font-display font-bold text-[13px] bg-brand-red/15 text-brand-red'; num.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'; }
+          else if (k === n && num) { num.className = 'w-8 h-8 rounded-full grid place-items-center font-display font-bold text-[13px] bg-brand-red text-white'; num.textContent = `0${k}`; }
+          else if (num) { num.className = 'w-8 h-8 rounded-full grid place-items-center font-display font-bold text-[13px] bg-ink/8 text-ink/60'; num.textContent = `0${k}`; }
+          if (label) label.className = `text-[12px] font-display uppercase tracking-wider ${k === n ? 'text-ink' : 'text-muted'}`;
+        });
+      }
+    }
+    form.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((b) => b.addEventListener('click', () => {
+      if (current < 3) { current++; show(current); }
+    }));
+    form.querySelectorAll<HTMLButtonElement>('[data-back]').forEach((b) => b.addEventListener('click', () => {
+      if (current > 1) { current--; show(current); }
+    }));
+    form.addEventListener('submit', (e) => { e.preventDefault(); show('success'); });
+    form.querySelector<HTMLButtonElement>('[data-reset]')?.addEventListener('click', () => {
+      (form as HTMLFormElement).reset();
+      current = 1; show(1);
+    });
+  }
+</script>

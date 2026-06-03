@@ -1,0 +1,74 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import ColourMatchForm from '@/components/ColourMatchForm.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FloatingCTA from '@/components/FloatingCTA.astro';
+import { SITE } from '@/data/site';
+---
+<Layout title={`Colour Matching — ${SITE.name}`} description="Match any car paint colour to OEM spec. 40+ marques, solid, metallic, pearl and xirallic. Aerosols made-to-order in Romford.">
+  <!-- Hero -->
+  <section class="relative pt-24 pb-16 lg:pt-32 lg:pb-20 mesh-bone overflow-hidden">
+    <div class="container-x grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+      <div>
+        <p class="eyebrow reveal">Colour Matching</p>
+        <h1 class="h-display mt-5 text-ink text-balance reveal" data-delay="1">
+          Any car. Any year.<br/>
+          <span class="text-brand-red">Any colour</span> — mixed.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-muted leading-relaxed text-pretty reveal" data-delay="2">
+          Send us a paint code, a number plate, or a paint chip — we will mix the exact colour. Aerosols made-to-order, tinned trade volumes, and bulk delivery across the South East.
+        </p>
+      </div>
+
+      <!-- Swatches visual -->
+      <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 reveal" data-delay="2">
+        {[
+          { c: '#CE2A2D', n: 'Pimento Red'         },
+          { c: '#1C3A6F', n: 'Royal Navy'          },
+          { c: '#2D4F2C', n: 'British Racing Green' },
+          { c: '#C8C9CB', n: 'Opalescent Silver'   },
+          { c: '#1A1A1A', n: 'Jet Black'           },
+          { c: '#7F1410', n: 'Carmine'             },
+          { c: '#3B5998', n: 'Daytona Blue'        },
+          { c: '#F2E9D6', n: 'Old English White'   },
+        ].map((s) => (
+          <div class="card-lift group">
+            <div class="aspect-square rounded-2xl shadow-soft border border-line/60" style={`background-color: ${s.c};`}></div>
+            <p class="mt-2 font-mono text-[10.5px] uppercase tracking-tight text-muted text-center">{s.n}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- The form -->
+  <ColourMatchForm compact />
+
+  <!-- Reassurance grid -->
+  <section class="py-24 lg:py-28 bg-snow">
+    <div class="container-x">
+      <div class="grid lg:grid-cols-3 gap-6 lg:gap-8">
+        {[
+          { i: 'gauge', t: 'OEM accuracy', b: 'Cross-referenced against manufacturer archives and our 35-year colour library.' },
+          { i: 'spray-can', t: 'Aerosol on demand', b: 'Same-day aerosol mixing. Collect from the shop or we post next working day.' },
+          { i: 'truck', t: 'Trade volumes', b: 'Litre tins to bulk deliveries. Call the trade counter on weekday mornings for best lead times.' },
+        ].map((b, i) => (
+          <div class="card-lift bg-bone rounded-3xl p-7 lg:p-9 border border-line reveal" data-delay={`${(i % 4) + 1}`}>
+            <span class={`w-12 h-12 rounded-2xl ${i === 1 ? 'bg-brand-blue text-white' : 'bg-brand-red text-white'} grid place-items-center`}>
+              <Icon name={b.i as any} size={20} />
+            </span>
+            <h3 class="h-card mt-5 text-ink">{b.t}</h3>
+            <p class="mt-3 text-[14.5px] text-muted leading-relaxed">{b.b}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Got the code? Skip the form."
+    body="Ring the shop direct and read out the paint code. We will quote a price on the call and have it mixed before you arrive."
+  />
+  <FloatingCTA />
+</Layout>

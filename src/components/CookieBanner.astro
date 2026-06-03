@@ -1,0 +1,44 @@
+---
+import Icon from './Icon.astro';
+---
+<div id="cookie-banner" class="fixed bottom-4 inset-x-4 lg:bottom-6 lg:left-6 lg:right-auto lg:max-w-md z-[55] hidden">
+  <div class="glass-card rounded-2xl p-5 shadow-lift">
+    <div class="flex items-start gap-3">
+      <span class="flex-shrink-0 w-9 h-9 rounded-xl bg-brand-blue/10 text-brand-blue grid place-items-center"><Icon name="cookie" size={18} /></span>
+      <div class="flex-1">
+        <p class="font-display font-semibold text-[14px] text-ink">A quick word about cookies</p>
+        <p class="text-[12.5px] text-muted mt-1 leading-relaxed">
+          We use essential cookies to make this site work and anonymous analytics to improve it. See our <a href="/cookies" class="text-brand-red link-underline">cookie policy</a> for details.
+        </p>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <button type="button" data-cookie-accept class="text-[12px] font-display font-semibold uppercase tracking-wider px-4 py-2 rounded-pill bg-brand-red text-white hover:bg-brand-red-deep transition-colors">Accept All</button>
+          <button type="button" data-cookie-essential class="text-[12px] font-display font-semibold uppercase tracking-wider px-4 py-2 rounded-pill bg-ink/5 text-ink hover:bg-ink/10 transition-colors">Essential Only</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const KEY = 'ccs_cookie_pref_v1';
+  const banner = document.getElementById('cookie-banner');
+  function ready() {
+    if (!banner) return;
+    try {
+      const v = localStorage.getItem(KEY);
+      if (!v) {
+        setTimeout(() => banner.classList.remove('hidden'), 800);
+      }
+    } catch { /* no-op */ }
+    banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
+      try { localStorage.setItem(KEY, 'all'); } catch {}
+      banner.classList.add('hidden');
+    });
+    banner.querySelector('[data-cookie-essential]')?.addEventListener('click', () => {
+      try { localStorage.setItem(KEY, 'essential'); } catch {}
+      banner.classList.add('hidden');
+    });
+  }
+  ready();
+  document.addEventListener('astro:page-load', ready);
+</script>

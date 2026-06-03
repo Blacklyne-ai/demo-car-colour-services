@@ -1,0 +1,61 @@
+---
+import { REVIEWS, REVIEWS_META } from '@/data/reviews';
+import Icon from './Icon.astro';
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+---
+<section class="relative py-24 lg:py-32 bg-bone overflow-hidden">
+  <div class="container-x">
+    <div class="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-16 items-start mb-12">
+      <div>
+        <p class="eyebrow reveal">Customer Voice</p>
+        <h2 class="h-section mt-4 text-ink text-balance reveal" data-delay="1">
+          The kind of service<br/>that gets <span class="text-brand-red">remembered</span>.
+        </h2>
+      </div>
+      <div class="reveal" data-delay="2">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-6 mb-3">
+          <div class="flex items-center gap-2">
+            {[1,2,3,4,5].map(() => (
+              <Icon name="star" size={26} class="fill-brand-red text-brand-red" />
+            ))}
+          </div>
+          <div>
+            <p class="font-display font-bold text-3xl text-ink leading-none">{REVIEWS_META.aggregateRating}<span class="text-muted text-xl">/5</span></p>
+            <p class="text-[13px] text-muted mt-1">From <span data-counter={REVIEWS_META.reviewCount}>0</span>+ verified Google reviews</p>
+          </div>
+        </div>
+        <a href={REVIEWS_META.placeUrl} target="_blank" rel="noopener" class="text-brand-blue font-medium link-underline inline-flex items-center gap-1.5 text-[14px]">
+          Read all reviews on Google <Icon name="external-link" size={13} />
+        </a>
+      </div>
+    </div>
+
+    <!-- Editorial review grid (asymmetric) -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+      {REVIEWS.map((r, i) => (
+        <article class={`group relative bg-snow rounded-3xl p-7 border border-line card-lift reveal ${i === 0 ? 'lg:row-span-2 lg:p-9' : ''}`} data-delay={`${(i % 4) + 1}`}>
+          <Icon name="quote" size={28} class={i === 0 ? 'text-brand-red mb-4' : 'text-brand-red/70 mb-3'} />
+          <p class={`text-ink leading-relaxed text-pretty ${i === 0 ? 'text-xl lg:text-2xl font-display font-medium leading-snug' : 'text-[15px]'}`}>
+            "{r.body}"
+          </p>
+          <div class="mt-6 pt-5 border-t border-line flex items-center gap-3">
+            <span class={`flex-shrink-0 w-10 h-10 rounded-full grid place-items-center font-display font-bold text-[13px] ${i % 2 === 0 ? 'bg-brand-red/10 text-brand-red' : 'bg-brand-blue/10 text-brand-blue'}`}>{r.initial}</span>
+            <div class="flex-1">
+              <p class="font-display font-semibold text-[14px] text-ink">{r.author}</p>
+              <p class="text-[11.5px] text-muted">{r.context} · {formatDate(r.date)}</p>
+            </div>
+            <div class="flex items-center gap-0.5">
+              {Array.from({ length: r.rating }).map(() => (
+                <Icon name="star" size={13} class="fill-brand-red text-brand-red" />
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

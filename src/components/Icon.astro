@@ -1,0 +1,65 @@
+---
+// Thin wrapper around @lucide/astro for consistent sizing/stroke.
+import {
+  ArrowRight, ArrowUpRight, Phone, Mail, MapPin, Clock, Search, Menu, X,
+  CheckCircle2, ChevronDown, ChevronRight, Star, Quote,
+  PaintBucket, SprayCan, Layers, Shapes, History, Wrench, Hammer,
+  ShieldCheck, Award, Truck, Users, Building2, Sparkles, Palette,
+  Cookie, Lock, FileText, ExternalLink,
+  CarFront, Beaker, Brush, Gauge, Flame, Crown,
+} from '@lucide/astro';
+
+const ICONS = {
+  'arrow-right': ArrowRight,
+  'arrow-up-right': ArrowUpRight,
+  phone: Phone,
+  mail: Mail,
+  'map-pin': MapPin,
+  clock: Clock,
+  search: Search,
+  menu: Menu,
+  x: X,
+  check: CheckCircle2,
+  'chevron-down': ChevronDown,
+  'chevron-right': ChevronRight,
+  star: Star,
+  quote: Quote,
+  paintbucket: PaintBucket,
+  'spray-can': SprayCan,
+  spray: SprayCan,
+  layers: Layers,
+  shapes: Shapes,
+  history: History,
+  wrench: Wrench,
+  hammer: Hammer,
+  shield: ShieldCheck,
+  award: Award,
+  truck: Truck,
+  users: Users,
+  building: Building2,
+  sparkles: Sparkles,
+  palette: Palette,
+  cookie: Cookie,
+  lock: Lock,
+  'file-text': FileText,
+  'external-link': ExternalLink,
+  'car-front': CarFront,
+  beaker: Beaker,
+  brush: Brush,
+  gauge: Gauge,
+  flame: Flame,
+  crown: Crown,
+};
+
+interface Props {
+  name: keyof typeof ICONS;
+  class?: string;
+  size?: number;
+  strokeWidth?: number;
+  'aria-hidden'?: boolean;
+}
+
+const { name, class: cls = '', size = 20, strokeWidth = 1.75, 'aria-hidden': ah = true } = Astro.props;
+const Cmp = ICONS[name];
+---
+{Cmp && <Cmp class={cls} size={size} stroke-width={strokeWidth} aria-hidden={ah} />}

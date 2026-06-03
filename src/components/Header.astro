@@ -1,0 +1,206 @@
+---
+import { SITE } from '@/data/site';
+import Icon from './Icon.astro';
+import OpeningHoursLive from './OpeningHoursLive.astro';
+
+const NAV = [
+  { href: '/shop',                  label: 'Shop',          mega: true  },
+  { href: '/colour-matching',       label: 'Colour Match'                },
+  { href: '/classic-cars',          label: 'Classic Cars'                },
+  { href: '/trade-account',         label: 'Trade Account'               },
+  { href: '/body-shop-referrals',   label: 'Body Shops'                  },
+  { href: '/who-we-are',            label: 'Who We Are'                  },
+  { href: '/contact',               label: 'Contact'                     },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+import { CATEGORIES } from '@/data/categories';
+---
+<header id="site-header" class="fixed inset-x-0 top-0 z-50 pt-3 lg:pt-5 transition-all duration-300">
+  <div class="container-x">
+    <div class="glass-nav rounded-pill flex items-center justify-between gap-3 pl-3 pr-2 lg:pl-5 lg:pr-3 py-2 lg:py-2.5 transition-all duration-300" data-nav-pill>
+      <!-- Logo lockup -->
+      <a href="/" class="flex items-center gap-3 group flex-shrink-0" aria-label="Car Colour Services — home">
+        <img src="/logo-mark.svg" alt="" width="44" height="44" class="w-9 h-9 lg:w-11 lg:h-11 transition-transform duration-300 group-hover:rotate-[8deg]" />
+        <div class="hidden sm:flex flex-col leading-none">
+          <span class="font-display font-bold uppercase text-[15px] tracking-wider">
+            <span class="text-brand-red">CAR</span>
+            <span class="text-brand-blue">COLOUR</span>
+          </span>
+          <span class="font-display font-bold uppercase text-[15px] tracking-wider text-brand-red -mt-0.5">SERVICES</span>
+        </div>
+      </a>
+
+      <!-- Centre nav -->
+      <nav class="hidden lg:flex items-center gap-1 mx-2" aria-label="Primary">
+        {NAV.map((item) => {
+          const active = path === item.href || (item.href !== '/' && path.startsWith(item.href));
+          return (
+            <a
+              href={item.href}
+              class={`relative px-3.5 py-2 font-display uppercase tracking-wider text-[12.5px] font-medium rounded-full transition-colors ${active ? 'text-brand-red bg-brand-red/8' : 'text-ink/80 hover:text-ink hover:bg-ink/5'}`}
+              aria-current={active ? 'page' : undefined}
+            >
+              {item.label}
+              {item.mega && <span class="ml-1 text-ink/30">▾</span>}
+            </a>
+          );
+        })}
+      </nav>
+
+      <!-- Right-hand: live status + search + phone CTA -->
+      <div class="flex items-center gap-2">
+        <OpeningHoursLive variant="badge" class="hidden md:flex" />
+        <button type="button" aria-label="Search" data-search-trigger class="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full text-ink/70 hover:text-ink hover:bg-ink/5 transition">
+          <Icon name="search" size={18} />
+        </button>
+        <a href={`tel:${SITE.phoneTel}`} class="btn-primary hidden md:inline-flex !py-2.5 !px-4 !text-[12px]">
+          <Icon name="phone" size={15} />
+          <span class="hidden xl:inline">{SITE.phone}</span>
+          <span class="xl:hidden">Call</span>
+        </a>
+        <button type="button" data-mobile-open class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full text-ink/80 hover:bg-ink/5" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-overlay">
+          <Icon name="menu" size={22} />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mega-menu (desktop hover panel for Shop) -->
+  <div id="mega-shop" class="hidden lg:block container-x mt-2 opacity-0 pointer-events-none transition-all duration-300 -translate-y-2" data-mega>
+    <div class="glass-nav rounded-3xl p-6 lg:p-8 max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-5">
+        <p class="eyebrow eyebrow-blue">Shop by Category</p>
+        <a href="/shop" class="text-[12.5px] font-display uppercase tracking-wider text-brand-red link-underline">Browse All →</a>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {CATEGORIES.map((c) => (
+          <a href={`/shop/${c.slug}`} class="group flex items-start gap-3 p-3 rounded-2xl hover:bg-brand-blue/5 transition-colors">
+            <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-brand-blue/8 grid place-items-center text-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-colors">
+              <Icon name={c.icon as any} size={18} />
+            </div>
+            <div>
+              <h4 class="font-display font-semibold text-[14px] text-ink leading-tight">{c.title}</h4>
+              <p class="text-[11.5px] text-muted mt-0.5">{c.count}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile overlay -->
+<div id="mobile-overlay" class="fixed inset-0 z-[60] hidden" aria-hidden="true">
+  <div class="absolute inset-0 bg-brand-blue-deep/95 backdrop-blur-xl" data-mobile-close></div>
+  <div class="absolute inset-x-0 top-0 p-5 flex items-center justify-between text-white">
+    <a href="/" class="flex items-center gap-2.5">
+      <img src="/logo-mark.svg" alt="" width="40" height="40" class="w-10 h-10 bg-white rounded-full p-0.5" />
+      <span class="font-display font-bold uppercase tracking-wider text-sm">Car Colour Services</span>
+    </a>
+    <button type="button" data-mobile-close class="w-11 h-11 rounded-full bg-white/10 grid place-items-center hover:bg-white/20 transition" aria-label="Close menu">
+      <Icon name="x" size={22} />
+    </button>
+  </div>
+  <nav class="absolute inset-x-0 top-24 bottom-0 px-6 pb-8 overflow-y-auto text-white" aria-label="Mobile">
+    <ul class="space-y-1">
+      {NAV.map((item, i) => (
+        <li>
+          <a href={item.href} class="flex items-center justify-between py-4 border-b border-white/10 font-display uppercase tracking-wider text-[22px] hover:text-brand-red-soft transition-colors">
+            <span>{item.label}</span>
+            <Icon name="arrow-up-right" size={20} />
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-8 grid gap-3">
+      <a href={`tel:${SITE.phoneTel}`} class="flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/15">
+        <span class="w-10 h-10 grid place-items-center rounded-full bg-brand-red"><Icon name="phone" size={18} /></span>
+        <div>
+          <p class="text-[11px] uppercase tracking-wider text-white/60 font-display">Call the shop</p>
+          <p class="font-display font-semibold">{SITE.phone}</p>
+        </div>
+      </a>
+      <a href={`mailto:${SITE.email}`} class="flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/15">
+        <span class="w-10 h-10 grid place-items-center rounded-full bg-brand-blue"><Icon name="mail" size={18} /></span>
+        <div>
+          <p class="text-[11px] uppercase tracking-wider text-white/60 font-display">Email us</p>
+          <p class="font-medium">{SITE.email}</p>
+        </div>
+      </a>
+    </div>
+  </nav>
+</div>
+
+<script>
+  // Shrink-on-scroll
+  const header = document.getElementById('site-header');
+  let last = 0;
+  function onScroll() {
+    const y = window.scrollY;
+    if (!header) return;
+    if (y > 24) header.classList.add('is-scrolled');
+    else header.classList.remove('is-scrolled');
+    last = y;
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile overlay
+  const overlay = document.getElementById('mobile-overlay');
+  document.querySelectorAll<HTMLButtonElement>('[data-mobile-open]').forEach((b) =>
+    b.addEventListener('click', () => {
+      overlay?.classList.remove('hidden');
+      overlay?.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    })
+  );
+  document.querySelectorAll<HTMLButtonElement>('[data-mobile-close]').forEach((b) =>
+    b.addEventListener('click', () => {
+      overlay?.classList.add('hidden');
+      overlay?.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    })
+  );
+
+  // Mega menu (hover for Shop link)
+  const shopLink = document.querySelector<HTMLAnchorElement>('nav[aria-label="Primary"] a[href="/shop"]');
+  const mega = document.getElementById('mega-shop');
+  let megaTimer: number | undefined;
+  function showMega() {
+    if (!mega) return;
+    window.clearTimeout(megaTimer);
+    mega.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+    mega.classList.add('opacity-100', 'translate-y-0');
+  }
+  function hideMega() {
+    if (!mega) return;
+    megaTimer = window.setTimeout(() => {
+      mega.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+      mega.classList.remove('opacity-100', 'translate-y-0');
+    }, 120);
+  }
+  shopLink?.addEventListener('mouseenter', showMega);
+  shopLink?.addEventListener('mouseleave', hideMega);
+  mega?.addEventListener('mouseenter', showMega);
+  mega?.addEventListener('mouseleave', hideMega);
+
+  // Search trigger — simple alert placeholder for now (functional priority once shop live)
+  document.querySelectorAll<HTMLButtonElement>('[data-search-trigger]').forEach((b) =>
+    b.addEventListener('click', () => {
+      window.location.href = '/shop#search';
+    })
+  );
+</script>
+
+<style>
+  #site-header.is-scrolled [data-nav-pill] {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    box-shadow: 0 10px 32px -12px rgba(15, 23, 42, 0.18), 0 1px 0 rgb(255 255 255 / 0.6) inset;
+    transform: scale(0.985);
+  }
+  #site-header.is-scrolled {
+    padding-top: 0.5rem;
+  }
+</style>

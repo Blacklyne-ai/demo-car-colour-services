@@ -1,0 +1,17 @@
+---
+interface Props {
+  eyebrow?: string;
+  eyebrowVariant?: 'red' | 'blue';
+  title: string;
+  intro?: string;
+  align?: 'left' | 'center';
+  class?: string;
+}
+const { eyebrow, eyebrowVariant = 'red', title, intro, align = 'left', class: cls = '' } = Astro.props;
+const alignCls = align === 'center' ? 'text-center mx-auto' : '';
+---
+<div class={`max-w-3xl ${alignCls} ${cls}`}>
+  {eyebrow && <p class={`eyebrow ${eyebrowVariant === 'blue' ? 'eyebrow-blue' : ''} reveal`}>{eyebrow}</p>}
+  <h2 class="h-section mt-4 text-ink text-balance reveal" data-delay="1" set:html={title}></h2>
+  {intro && <p class="mt-5 text-lg text-muted leading-relaxed text-pretty reveal" data-delay="2">{intro}</p>}
+</div>

@@ -1,0 +1,29 @@
+---
+import { SITE } from '@/data/site';
+interface Props {
+  variant?: 'light' | 'dark';
+}
+const { variant = 'light' } = Astro.props;
+const isDark = variant === 'dark';
+const stats = [
+  { value: SITE.yearsTrading, suffix: '+', label: 'Years Trading', sub: 'Mixing colour since 1990' },
+  { value: SITE.productCount, suffix: '+', label: 'Product Lines', sub: 'In stock and online' },
+  { value: SITE.brandCount, suffix: '+', label: 'Car Brands', sub: 'Matched to OEM spec' },
+  { value: SITE.classicYears, suffix: '+', label: 'Years Classic Cars', sub: 'Concours to one-offs' },
+];
+---
+<div class={`grid grid-cols-2 lg:grid-cols-4 gap-px ${isDark ? 'bg-white/10' : 'bg-line'} rounded-3xl overflow-hidden`}>
+  {stats.map((s, i) => (
+    <div
+      class={`relative p-7 lg:p-10 ${isDark ? 'bg-brand-blue-deep text-white' : 'bg-snow text-ink'} reveal`}
+      data-delay={`${(i % 4) + 1}`}
+    >
+      <p class={`font-display font-bold leading-none flex items-baseline gap-0.5`} style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+        <span data-counter={s.value}>0</span>
+        <span class={`${isDark ? 'text-brand-red-soft' : 'text-brand-red'}`}>{s.suffix}</span>
+      </p>
+      <p class={`mt-3 font-display uppercase tracking-wider text-[11.5px] ${isDark ? 'text-white/65' : 'text-muted'}`}>{s.label}</p>
+      <p class={`mt-1 text-[13px] ${isDark ? 'text-white/55' : 'text-muted-soft'}`}>{s.sub}</p>
+    </div>
+  ))}
+</div>

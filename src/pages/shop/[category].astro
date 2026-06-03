@@ -1,0 +1,100 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FloatingCTA from '@/components/FloatingCTA.astro';
+import { CATEGORIES } from '@/data/categories';
+import { FEATURED_PRODUCTS } from '@/data/products';
+import { SITE } from '@/data/site';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { category: c.slug }, props: { category: c } }));
+}
+
+const { category } = Astro.props as { category: typeof CATEGORIES[number] };
+const others = CATEGORIES.filter((c) => c.slug !== category.slug);
+---
+<Layout
+  title={`${category.title} — ${SITE.name}`}
+  description={category.blurb}
+>
+  <!-- Editorial category hero -->
+  <section class="relative pt-20 pb-16 lg:pt-28 lg:pb-24 overflow-hidden">
+    <div class="absolute inset-0">
+      <img src={category.image} alt="" class="w-full h-full object-cover" data-parallax="0.15" />
+      <div class="absolute inset-0 bg-gradient-to-t from-brand-blue-deep/95 via-brand-blue-deep/70 to-brand-blue-deep/40"></div>
+      <div class="noise absolute inset-0"></div>
+    </div>
+    <div class="container-x relative text-white">
+      <nav aria-label="Breadcrumb" class="text-[12.5px] text-white/70 mb-6 font-display uppercase tracking-wider">
+        <a href="/" class="hover:text-white">Home</a>
+        <span class="mx-2">·</span>
+        <a href="/shop" class="hover:text-white">Shop</a>
+        <span class="mx-2">·</span>
+        <span class="text-brand-red-soft">{category.title}</span>
+      </nav>
+      <div class="grid lg:grid-cols-[1.6fr_1fr] gap-10 items-end">
+        <div>
+          <p class="eyebrow text-brand-red-soft reveal" style="--tw-text-opacity:1;">Category · {category.count}</p>
+          <h1 class="h-display mt-5 text-white text-balance reveal" data-delay="1">{category.title}</h1>
+          <p class="mt-6 max-w-2xl text-lg text-white/85 leading-relaxed text-pretty reveal" data-delay="2">{category.blurb}</p>
+        </div>
+        <div class="reveal" data-delay="3">
+          <div class="glass-card rounded-3xl p-6 bg-white/10 border-white/15 backdrop-blur-xl">
+            <p class="eyebrow text-brand-red-soft" style="--tw-text-opacity:1;">Get a Quick Price</p>
+            <p class="mt-3 text-[14.5px] text-white/85">Ring the shop for live stock and trade pricing.</p>
+            <a href={`tel:${SITE.phoneTel}`} class="mt-5 btn-primary w-full justify-center">
+              <Icon name="phone" size={15} /><span>{SITE.phone}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured products from this category area -->
+  <section class="py-20 lg:py-28 bg-snow">
+    <div class="container-x">
+      <div class="flex items-end justify-between gap-4 mb-8">
+        <div>
+          <p class="eyebrow reveal">Selected Lines</p>
+          <h2 class="h-section mt-3 text-balance reveal" data-delay="1">A sample of what is <span class="text-brand-red">on the shelf</span>.</h2>
+        </div>
+        <a href="/contact" class="btn-secondary hidden md:inline-flex"><span>Ask About Stock</span><Icon name="arrow-right" class="arrow" size={14} /></a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+        {FEATURED_PRODUCTS.map((p, i) => <ProductCard product={p} index={i} />)}
+      </div>
+      <div class="mt-10 p-7 lg:p-10 rounded-3xl bg-bone border border-line text-center">
+        <p class="eyebrow eyebrow-blue justify-center inline-flex" style="display:inline-flex;">Static Preview</p>
+        <p class="mt-3 font-display font-semibold text-xl text-ink">Full {category.title.toLowerCase()} catalogue available by phone or in-store.</p>
+        <p class="mt-2 text-muted text-[14.5px] max-w-xl mx-auto">Live e-commerce launches alongside the new site. For now, every line above is in stock — call the shop for current pricing and lead time.</p>
+        <div class="mt-5 flex flex-wrap justify-center gap-3">
+          <a href={`tel:${SITE.phoneTel}`} class="btn-primary"><Icon name="phone" size={15} /><span>{SITE.phone}</span></a>
+          <a href="/colour-matching" class="btn-secondary"><span>Colour Match Tool</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related categories -->
+  <section class="py-20 lg:py-28 bg-bone">
+    <div class="container-x">
+      <p class="eyebrow eyebrow-blue reveal">Continue Browsing</p>
+      <h2 class="h-section mt-3 text-balance reveal mb-10" data-delay="1">Related categories.</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
+        {others.map((c, i) => (
+          <a href={`/shop/${c.slug}`} class="card-lift block bg-snow rounded-2xl p-5 border border-line reveal" data-delay={`${(i % 4) + 1}`}>
+            <span class={`w-10 h-10 rounded-xl ${i % 2 === 0 ? 'bg-brand-red/10 text-brand-red' : 'bg-brand-blue/10 text-brand-blue'} grid place-items-center`}><Icon name={c.icon as any} size={18} /></span>
+            <p class="mt-4 font-display font-semibold text-[14.5px] text-ink leading-tight">{c.title}</p>
+            <p class="mt-1 text-[11.5px] text-muted font-mono">{c.count}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+  <FloatingCTA />
+</Layout>

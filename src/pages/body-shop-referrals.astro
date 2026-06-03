@@ -1,0 +1,93 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import ReferralMap from '@/components/ReferralMap.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FloatingCTA from '@/components/FloatingCTA.astro';
+import { SITE } from '@/data/site';
+import { REFERRAL_AREAS } from '@/data/bodyshops';
+---
+<Layout title={`Body-Shop Referrals — ${SITE.name}`} description="35+ years of Essex and East London bodyshop relationships. We refer private customers to repair partners we genuinely trust.">
+  <!-- Hero -->
+  <section class="relative pt-20 pb-20 lg:pt-28 lg:pb-28 bg-bone overflow-hidden">
+    <div class="container-x grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+      <div>
+        <p class="eyebrow eyebrow-blue reveal">Find Local Body-Repair Experts</p>
+        <h1 class="h-display mt-5 text-ink text-balance reveal" data-delay="1">
+          We sell the paint.<br/>
+          We also know <span class="text-brand-blue">who sprays it best</span>.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-muted leading-relaxed text-pretty reveal" data-delay="2">
+          As a paint specialist, our home is in the mixing room. But over 35 years we have built deep relationships with skilled bodyshops across Essex, East London and the wider South East. Tell us where you are — we will refer you to a shop we genuinely trust.
+        </p>
+      </div>
+      <div class="reveal" data-delay="3">
+        <ReferralMap />
+      </div>
+    </div>
+  </section>
+
+  <!-- Areas grid -->
+  <section class="py-24 lg:py-32 bg-snow">
+    <div class="container-x">
+      <div class="max-w-3xl mb-12">
+        <p class="eyebrow reveal">Coverage</p>
+        <h2 class="h-section mt-4 text-balance reveal" data-delay="1">Romford. Brentwood. Chelmsford.<br/><span class="text-brand-red">Wherever you are in the South East.</span></h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {REFERRAL_AREAS.map((a, i) => (
+          <div class="card-lift bg-bone rounded-3xl p-6 lg:p-7 border border-line reveal" data-delay={`${(i % 4) + 1}`}>
+            <div class="flex items-start justify-between gap-3">
+              <span class={`w-11 h-11 rounded-2xl ${i % 2 === 0 ? 'bg-brand-red/10 text-brand-red' : 'bg-brand-blue/10 text-brand-blue'} grid place-items-center`}><Icon name="map-pin" size={18} /></span>
+              <span class="font-mono text-[11px] uppercase tracking-tight text-muted">{a.postcode}</span>
+            </div>
+            <h3 class="h-card mt-5 text-ink">{a.area}</h3>
+            <p class="mt-2 text-[14px] text-muted leading-relaxed">{a.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Referral request form -->
+  <section class="py-24 lg:py-28 bg-bone">
+    <div class="container-x max-w-3xl">
+      <div class="text-center mb-12">
+        <p class="eyebrow reveal">Need a Recommendation?</p>
+        <h2 class="h-section mt-4 text-balance reveal" data-delay="1">Tell us the job.<br/>We will <span class="text-brand-red">put you in touch</span>.</h2>
+      </div>
+      <form id="referral-form" class="reveal" data-delay="2" novalidate>
+        <div class="glass-card rounded-3xl p-7 lg:p-9 shadow-lift">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="floating-field"><input id="r-name" type="text" placeholder=" " required /><label for="r-name">Your name</label></div>
+            <div class="floating-field"><input id="r-phone" type="tel" placeholder=" " required /><label for="r-phone">Phone</label></div>
+            <div class="floating-field sm:col-span-2"><input id="r-email" type="email" placeholder=" " required /><label for="r-email">Email</label></div>
+            <div class="floating-field"><input id="r-postcode" type="text" placeholder=" " required /><label for="r-postcode">Your postcode</label></div>
+            <div class="floating-field"><input id="r-vehicle" type="text" placeholder=" " /><label for="r-vehicle">Vehicle</label></div>
+            <div class="floating-field sm:col-span-2"><textarea id="r-job" rows="4" placeholder=" " required></textarea><label for="r-job">Describe the job (panel damage, paint condition, urgency)</label></div>
+          </div>
+          <div class="mt-6 flex justify-end">
+            <button type="submit" class="btn-primary"><Icon name="users" size={15} /><span>Request a Referral</span><Icon name="arrow-right" class="arrow" size={15} /></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <CtaBand />
+  <FloatingCTA />
+</Layout>
+<script>
+  document.getElementById('referral-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = e.target as HTMLFormElement;
+    f.querySelector('.glass-card')!.innerHTML = `
+      <div class="text-center py-10">
+        <div class="w-16 h-16 mx-auto rounded-full bg-brand-blue/10 text-brand-blue grid place-items-center mb-5">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-display font-bold text-2xl text-ink">Referral request received.</p>
+        <p class="mt-2 text-muted">A member of the team will call within one business day with a recommended shop.</p>
+      </div>`;
+  });
+</script>

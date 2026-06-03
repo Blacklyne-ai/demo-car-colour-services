@@ -1,0 +1,38 @@
+---
+import { SITE } from '@/data/site';
+import Icon from './Icon.astro';
+import OpeningHoursLive from './OpeningHoursLive.astro';
+
+interface Props { variant?: 'tiles' | 'editorial'; }
+const { variant = 'tiles' } = Astro.props;
+
+const items = [
+  { icon: 'phone', label: 'Call the shop', value: SITE.phone, href: `tel:${SITE.phoneTel}`, accent: 'red' as const },
+  { icon: 'mail', label: 'Email us', value: SITE.email, href: `mailto:${SITE.email}`, accent: 'blue' as const },
+  { icon: 'map-pin', label: 'Walk in', value: `${SITE.address.street}, ${SITE.address.city}`, href: 'https://www.google.com/maps/dir/?api=1&destination=92-94+Mawney+Road+Romford+RM7+7JB', accent: 'red' as const, external: true },
+  { icon: 'external-link', label: 'Message on Facebook', value: 'facebook.com/CarColourServices', href: SITE.social.facebook, accent: 'blue' as const, external: true },
+];
+---
+<div class={variant === 'tiles' ? 'grid sm:grid-cols-2 gap-4 lg:gap-5' : 'space-y-4'}>
+  {items.map((it, i) => (
+    <a
+      href={it.href}
+      target={it.external ? '_blank' : undefined}
+      rel={it.external ? 'noopener noreferrer' : undefined}
+      class={`group relative overflow-hidden flex items-start gap-4 p-5 lg:p-6 rounded-3xl border border-line bg-snow card-lift reveal`}
+      data-delay={`${(i % 4) + 1}`}
+    >
+      <span class={`flex-shrink-0 w-12 h-12 rounded-2xl grid place-items-center ${it.accent === 'red' ? 'bg-brand-red/10 text-brand-red group-hover:bg-brand-red group-hover:text-white' : 'bg-brand-blue/10 text-brand-blue group-hover:bg-brand-blue group-hover:text-white'} transition-colors`}>
+        <Icon name={it.icon as any} size={20} />
+      </span>
+      <div class="flex-1 min-w-0">
+        <p class="font-display uppercase tracking-wider text-[11px] text-muted">{it.label}</p>
+        <p class="font-display font-semibold text-ink text-[16px] mt-1 truncate">{it.value}</p>
+      </div>
+      <Icon name="arrow-up-right" size={16} class={`flex-shrink-0 mt-1 ${it.accent === 'red' ? 'text-brand-red' : 'text-brand-blue'} transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5`} />
+    </a>
+  ))}
+  <div class="sm:col-span-2 mt-2 reveal" data-delay="3">
+    <OpeningHoursLive variant="card" />
+  </div>
+</div>

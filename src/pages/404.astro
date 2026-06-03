@@ -1,0 +1,30 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import { CATEGORIES } from '@/data/categories';
+import { SITE } from '@/data/site';
+---
+<Layout title={`Page Not Found — ${SITE.name}`} description="That page is no longer on the shelf. Try the catalogue, the colour-matching tool or call the shop.">
+  <section class="min-h-[80vh] flex items-center mesh-bone py-20">
+    <div class="container-x max-w-4xl text-center">
+      <p class="font-display font-bold text-[16vw] lg:text-[12rem] leading-none text-brand-red/10 select-none">404</p>
+      <p class="-mt-8 lg:-mt-16 eyebrow justify-center inline-flex" style="display:inline-flex;">Page Not Found</p>
+      <h1 class="h-section mt-4 text-balance">That tin is not on the shelf.</h1>
+      <p class="mt-5 text-muted text-lg max-w-xl mx-auto text-pretty">
+        The page you are looking for has been moved, renamed, or perhaps never existed. Try one of these instead:
+      </p>
+      <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-3xl mx-auto">
+        {CATEGORIES.slice(0, 4).map((c) => (
+          <a href={`/shop/${c.slug}`} class="card-lift bg-snow rounded-2xl border border-line p-5">
+            <Icon name={c.icon as any} size={20} class="text-brand-red mb-3" />
+            <p class="font-display font-semibold text-[14px] text-ink leading-tight">{c.title}</p>
+          </a>
+        ))}
+      </div>
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <a href="/" class="btn-primary"><Icon name="arrow-right" class="arrow rotate-180" size={15} /><span>Back to Home</span></a>
+        <a href="/contact" class="btn-secondary"><Icon name="phone" size={15} /><span>Call the Shop</span></a>
+      </div>
+    </div>
+  </section>
+</Layout>

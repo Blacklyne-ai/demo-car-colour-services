@@ -1,0 +1,107 @@
+---
+import { SITE, DAY_INDEX } from '@/data/site';
+interface Props {
+  variant?: 'badge' | 'inline' | 'card';
+  class?: string;
+}
+const { variant = 'badge', class: cls = '' } = Astro.props;
+---
+<div
+  class={`opening-status ${cls}`}
+  data-hours={JSON.stringify(SITE.hours)}
+  data-day-index={JSON.stringify(DAY_INDEX)}
+  data-variant={variant}
+>
+  {variant === 'badge' && (
+    <span class="inline-flex items-center gap-2 text-[12px] font-medium text-ink/80">
+      <span class="status-dot is-closed" data-dot></span>
+      <span data-label class="font-display uppercase tracking-wider text-[11px]">Checking…</span>
+    </span>
+  )}
+  {variant === 'inline' && (
+    <div class="inline-flex items-center gap-2 text-sm">
+      <span class="status-dot is-closed" data-dot></span>
+      <span data-label class="text-ink font-medium">Checking opening hours…</span>
+    </div>
+  )}
+  {variant === 'card' && (
+    <div class="rounded-2xl border border-line bg-snow p-5">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="status-dot is-closed" data-dot></span>
+        <span data-label class="font-display uppercase tracking-wider text-sm text-ink">Checking…</span>
+      </div>
+      <ul class="text-[13px] grid grid-cols-2 gap-x-4 gap-y-1">
+        {SITE.hours.map((h) => (
+          <li class="flex justify-between gap-3">
+            <span class="text-muted">{h.day}</span>
+            <span class="font-medium text-ink">{h.open ? `${h.open}–${h.close}` : 'Closed'}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>
+
+<script>
+type Hour = { day: string; open: string | null; close: string | null };
+
+function evaluateStatus(hours: Hour[], idx: Record<string, number>) {
+  const now = new Date();
+  const dow = now.getDay(); // 0=Sun
+  const minsNow = now.getHours() * 60 + now.getMinutes();
+  const today = hours.find((h) => idx[h.day] === dow);
+  if (!today || !today.open || !today.close) {
+    // Find next opening day
+    for (let i = 1; i <= 7; i++) {
+      const next = hours.find((h) => idx[h.day] === (dow + i) % 7);
+      if (next && next.open) {
+        return { state: 'closed', label: `Closed · Opens ${next.day} ${next.open}` };
+      }
+    }
+    return { state: 'closed', label: 'Closed' };
+  }
+  const [oh, om] = today.open.split(':').map(Number);
+  const [ch, cm] = today.close.split(':').map(Number);
+  const openMin = oh * 60 + om;
+  const closeMin = ch * 60 + cm;
+  if (minsNow >= openMin && minsNow < closeMin) {
+    const minsToClose = closeMin - minsNow;
+    if (minsToClose <= 60) {
+      return { state: 'soon', label: `Closing in ${minsToClose} min` };
+    }
+    return { state: 'open', label: `Open now · until ${today.close}` };
+  }
+  if (minsNow < openMin) {
+    return { state: 'closed', label: `Closed · Opens today ${today.open}` };
+  }
+  // After closing — find next day
+  for (let i = 1; i <= 7; i++) {
+    const next = hours.find((h) => idx[h.day] === (dow + i) % 7);
+    if (next && next.open) {
+      return { state: 'closed', label: `Closed · Opens ${next.day} ${next.open}` };
+    }
+  }
+  return { state: 'closed', label: 'Closed' };
+}
+
+function applyStatus(root: Element) {
+  const hours = JSON.parse(root.getAttribute('data-hours') || '[]') as Hour[];
+  const idx = JSON.parse(root.getAttribute('data-day-index') || '{}') as Record<string, number>;
+  const { state, label } = evaluateStatus(hours, idx);
+  const dot = root.querySelector('[data-dot]');
+  const lbl = root.querySelector('[data-label]');
+  if (dot) {
+    dot.classList.remove('is-open', 'is-closed', 'is-soon');
+    dot.classList.add(state === 'open' ? 'is-open' : state === 'soon' ? 'is-soon' : 'is-closed');
+  }
+  if (lbl) lbl.textContent = label;
+}
+
+function refreshAll() {
+  document.querySelectorAll<HTMLElement>('.opening-status').forEach(applyStatus);
+}
+
+refreshAll();
+setInterval(refreshAll, 60_000);
+document.addEventListener('astro:page-load', refreshAll);
+</script>

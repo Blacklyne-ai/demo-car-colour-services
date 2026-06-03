@@ -1,0 +1,77 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import ContactMethods from '@/components/ContactMethods.astro';
+import OpeningHoursLive from '@/components/OpeningHoursLive.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FloatingCTA from '@/components/FloatingCTA.astro';
+import { SITE } from '@/data/site';
+---
+<Layout title={`Contact — ${SITE.name}`} description="Speak to the team at Car Colour Services in Romford. Phone, email, WhatsApp or walk in to the shop on Mawney Road.">
+  <!-- Asymmetric editorial hero -->
+  <section class="relative pt-20 pb-12 lg:pt-28 lg:pb-16 mesh-bone overflow-hidden">
+    <div class="container-x">
+      <div class="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-16 items-end">
+        <div>
+          <p class="eyebrow reveal">Get In Touch</p>
+          <h1 class="h-display mt-5 text-ink text-balance reveal" data-delay="1">
+            No call queues.<br/>
+            No chatbots.<br/>
+            <span class="text-brand-red">Just the team.</span>
+          </h1>
+          <p class="mt-6 max-w-xl text-lg text-muted leading-relaxed text-pretty reveal" data-delay="2">
+            Walk in to the shop on Mawney Road, ring us direct, or send the paint code by email. Whoever answers will know what you are talking about — promise.
+          </p>
+        </div>
+        <div class="reveal" data-delay="3">
+          <OpeningHoursLive variant="card" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact methods + map editorial split -->
+  <section class="py-16 lg:py-24 bg-snow">
+    <div class="container-x grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+      <div>
+        <p class="eyebrow eyebrow-blue reveal">Pick Your Channel</p>
+        <h2 class="h-section mt-4 text-balance reveal" data-delay="1">However suits<br/><span class="text-brand-blue">you best</span>.</h2>
+        <p class="mt-5 text-muted text-[15.5px] reveal" data-delay="2">No web form replies. Whoever you reach is the same person who would help if you walked in the door.</p>
+        <div class="mt-10">
+          <ContactMethods />
+        </div>
+      </div>
+
+      <div class="lg:sticky lg:top-32 space-y-6">
+        <!-- Map -->
+        <div class="rounded-3xl overflow-hidden border border-line shadow-lift">
+          <iframe
+            title="Map showing Car Colour Services, 92-94 Mawney Road, Romford RM7 7JB"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=0.1650%2C51.5720%2C0.1900%2C51.5830&layer=mapnik&marker=51.5774%2C0.1772"
+            class="w-full aspect-[4/3] block"
+          ></iframe>
+        </div>
+
+        <!-- Address card -->
+        <div class="rounded-3xl bg-bone border border-line p-6">
+          <p class="eyebrow reveal">Visit the Shop</p>
+          <address class="not-italic mt-3 text-ink font-display font-semibold text-lg">
+            {SITE.address.street}<br/>
+            {SITE.address.city}, {SITE.address.county} {SITE.address.postcode}
+          </address>
+          <a href="https://www.google.com/maps/dir/?api=1&destination=92-94+Mawney+Road+Romford+RM7+7JB" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 text-brand-red font-medium link-underline">
+            Directions on Google Maps <Icon name="external-link" size={13} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Walk in. Ring up. Email over."
+    body="The shop is at 92-94 Mawney Road, RM7 7JB. The phone is 01708 746468. The mixing room is open six days a week."
+  />
+  <FloatingCTA />
+</Layout>

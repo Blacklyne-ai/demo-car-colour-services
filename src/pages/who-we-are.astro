@@ -1,0 +1,95 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import StatsCounter from '@/components/StatsCounter.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import FloatingCTA from '@/components/FloatingCTA.astro';
+import { SITE } from '@/data/site';
+---
+<Layout title={`Who We Are — ${SITE.name}`} description="Independent automotive paint supplier in Romford, Essex since 1990. Mixed by hand for trade, private and classic customers across the South East.">
+  <!-- Hero -->
+  <section class="relative pt-20 pb-24 lg:pt-28 lg:pb-32 mesh-bone overflow-hidden">
+    <div class="container-x grid lg:grid-cols-[1.3fr_1fr] gap-12 lg:gap-20 items-end">
+      <div>
+        <p class="eyebrow reveal">Who We Are</p>
+        <h1 class="h-display mt-5 text-ink text-balance reveal" data-delay="1">
+          The independent <span class="text-brand-red">paint specialists</span><br/>
+          on <span class="text-brand-blue">Mawney Road</span>.
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg text-muted text-pretty leading-relaxed reveal" data-delay="2">
+          Car Colour Services has been supplying high-quality automotive paint and colour solutions since 1990. Based in Romford, Essex, we support both trade and private customers across the South East and the wider UK.
+        </p>
+      </div>
+      <div class="reveal" data-delay="3">
+        <img src="/shopfront-hero.jpg" alt="The Car Colour Services shopfront on Mawney Road, Romford" class="rounded-3xl shadow-lift w-full h-auto" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial story -->
+  <section class="py-24 lg:py-32 bg-snow">
+    <div class="container-x grid lg:grid-cols-[1fr_1.6fr] gap-12 lg:gap-20">
+      <aside>
+        <p class="eyebrow eyebrow-blue reveal">Our Story</p>
+        <h2 class="h-section mt-4 text-balance reveal" data-delay="1">Three decades.<br/>One mixing room.<br/><span class="text-brand-blue">Same standards.</span></h2>
+        <div class="mt-8 space-y-5 reveal" data-delay="2">
+          {[
+            { y: '1990', e: 'Founded on Mawney Road by a team determined to give Essex bodyshops an independent supplier.' },
+            { y: '2000', e: 'Classic-car restoration becomes a specialism — cellulose and period-correct refinishing.' },
+            { y: '2015', e: 'Online catalogue launches. Same shop, same team — now national reach.' },
+            { y: '2026', e: '35+ years trading. Trusted by trade bodyshops, restorers and motorists across the South East.' },
+          ].map((m) => (
+            <div class="flex gap-4">
+              <span class="font-display font-bold text-brand-red text-[15px] w-12 flex-shrink-0">{m.y}</span>
+              <p class="text-ink/80 text-[14.5px] leading-relaxed">{m.e}</p>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      <div class="prose-editorial space-y-7 text-ink/85 text-[16.5px] leading-[1.75]">
+        <p class="dropcap reveal">
+          Car Colour Services has been supplying high-quality automotive paint and colour solutions since 1990. Based in Romford, Essex, we support both trade and private customers across the South East and the wider UK.
+        </p>
+        <p class="reveal" data-delay="1">
+          Car Colour Services is an independently owned company, and that independence is central to how we work. We are not tied to manufacturer incentives or rebate-driven targets. The advice you get over our counter is the advice we would give our own family — about the paint that will actually do the job in front of you.
+        </p>
+        <p class="reveal" data-delay="2">
+          We stock paint for car, motorcycle, commercial, fleet, light industrial and wood surfaces. We carry trusted brands including MaxMeyer, Nexa Autocolor, Lesonal, SINNEK, Sikkens and Novol — allowing us to mix metallic, pearl and xirallic colours, and to match anything from a modern OEM finish to a 1960s cellulose enamel.
+        </p>
+        <p class="reveal" data-delay="3">
+          Since 1990, CCS has worked for its customers by providing technical assistance, sourcing of quality cost-effective products, and ensuring a high level of colour matching and stock replenishment services. We have built our reputation on knowledge, service, and long-term relationships — helping customers achieve consistently high-quality results, whether they are running a busy bodyshop or working on a one-off vehicle project.
+        </p>
+
+        <!-- Contact methods inline (replaces the 2 emojis with Lucide icons) -->
+        <div class="mt-10 grid sm:grid-cols-2 gap-4 reveal" data-delay="3">
+          <a href={`tel:${SITE.phoneTel}`} class="group flex items-center gap-4 p-5 rounded-2xl bg-brand-red/5 hover:bg-brand-red/10 border border-brand-red/15 transition-colors">
+            <span class="flex-shrink-0 w-11 h-11 rounded-xl bg-brand-red text-white grid place-items-center"><Icon name="phone" size={18} /></span>
+            <div>
+              <p class="font-display uppercase tracking-wider text-[11px] text-muted">Speak to the team</p>
+              <p class="font-display font-semibold text-ink text-[15.5px] mt-0.5">{SITE.phone}</p>
+            </div>
+          </a>
+          <a href={`mailto:${SITE.email}`} class="group flex items-center gap-4 p-5 rounded-2xl bg-brand-blue/5 hover:bg-brand-blue/10 border border-brand-blue/15 transition-colors">
+            <span class="flex-shrink-0 w-11 h-11 rounded-xl bg-brand-blue text-white grid place-items-center"><Icon name="mail" size={18} /></span>
+            <div>
+              <p class="font-display uppercase tracking-wider text-[11px] text-muted">Email the shop</p>
+              <p class="font-medium text-ink text-[14px] mt-0.5 truncate">{SITE.email}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="bg-snow pb-24 lg:pb-32">
+    <div class="container-x"><StatsCounter variant="light" /></div>
+  </section>
+
+  <CtaBand
+    title="Come see for yourself."
+    body="Walk in the door. Meet the team. See the mixing room. The kettle is on."
+  />
+  <FloatingCTA />
+</Layout>
