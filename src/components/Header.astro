@@ -91,109 +91,174 @@ import { CATEGORIES } from '@/data/categories';
 </header>
 
 <!-- Mobile overlay -->
-<div id="mobile-overlay" class="fixed inset-0 z-[60] hidden" aria-hidden="true">
-  <div class="absolute inset-0 bg-brand-blue-deep/95 backdrop-blur-xl" data-mobile-close></div>
-  <div class="absolute inset-x-0 top-0 p-5 flex items-center justify-between text-white">
-    <a href="/" class="flex items-center gap-2.5">
-      <img src="/logo-mark.svg" alt="" width="40" height="40" class="w-10 h-10 bg-white rounded-full p-0.5" />
-      <span class="font-display font-bold uppercase tracking-wider text-sm">Car Colour Services</span>
-    </a>
-    <button type="button" data-mobile-close class="w-11 h-11 rounded-full bg-white/10 grid place-items-center hover:bg-white/20 transition" aria-label="Close menu">
-      <Icon name="x" size={22} />
-    </button>
-  </div>
-  <nav class="absolute inset-x-0 top-24 bottom-0 px-6 pb-8 overflow-y-auto text-white" aria-label="Mobile">
-    <ul class="space-y-1">
-      {NAV.map((item, i) => (
-        <li>
-          <a href={item.href} class="flex items-center justify-between py-4 border-b border-white/10 font-display uppercase tracking-wider text-[22px] hover:text-brand-red-soft transition-colors">
-            <span>{item.label}</span>
-            <Icon name="arrow-up-right" size={20} />
-          </a>
-        </li>
-      ))}
-    </ul>
-    <div class="mt-8 grid gap-3">
-      <a href={`tel:${SITE.phoneTel}`} class="flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/15">
-        <span class="w-10 h-10 grid place-items-center rounded-full bg-brand-red"><Icon name="phone" size={18} /></span>
-        <div>
-          <p class="text-[11px] uppercase tracking-wider text-white/60 font-display">Call the shop</p>
-          <p class="font-display font-semibold">{SITE.phone}</p>
-        </div>
+<div id="mobile-overlay" class="mobile-overlay fixed inset-0 z-[60]" aria-hidden="true">
+  <button type="button" class="mobile-backdrop absolute inset-0 w-full h-full" data-mobile-close aria-label="Close menu"></button>
+  <div class="mobile-panel relative h-full flex flex-col">
+    <div class="flex items-center justify-between px-5 pt-5 pb-3 flex-shrink-0">
+      <a href="/" class="flex items-center gap-2.5 text-white" data-mobile-link>
+        <img src="/logo-mark.svg" alt="" width="40" height="40" class="w-10 h-10 bg-white rounded-full p-0.5" />
+        <span class="font-display font-bold uppercase tracking-wider text-sm">Car Colour Services</span>
       </a>
-      <a href={`mailto:${SITE.email}`} class="flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/15">
-        <span class="w-10 h-10 grid place-items-center rounded-full bg-brand-blue"><Icon name="mail" size={18} /></span>
-        <div>
-          <p class="text-[11px] uppercase tracking-wider text-white/60 font-display">Email us</p>
-          <p class="font-medium">{SITE.email}</p>
-        </div>
-      </a>
+      <button type="button" data-mobile-close class="w-11 h-11 rounded-full bg-white/10 grid place-items-center hover:bg-white/20 transition text-white" aria-label="Close menu">
+        <Icon name="x" size={22} />
+      </button>
     </div>
-  </nav>
+    <nav class="flex-1 overflow-y-auto px-6 pb-8 text-white" aria-label="Mobile">
+      <ul class="space-y-1 mt-4">
+        {NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              data-mobile-link
+              class="mobile-link flex items-center justify-between py-4 border-b border-white/10 font-display uppercase tracking-wider text-[22px] hover:text-brand-red-soft transition-colors"
+            >
+              <span>{item.label}</span>
+              <Icon name="arrow-up-right" size={20} />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-8 grid gap-3">
+        <a href={`tel:${SITE.phoneTel}`} data-mobile-link class="flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/15">
+          <span class="w-10 h-10 grid place-items-center rounded-full bg-brand-red text-white"><Icon name="phone" size={18} /></span>
+          <div>
+            <p class="text-[11px] uppercase tracking-wider text-white/60 font-display">Call the shop</p>
+            <p class="font-display font-semibold text-white">{SITE.phone}</p>
+          </div>
+        </a>
+        <a href={`mailto:${SITE.email}`} data-mobile-link class="flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/15">
+          <span class="w-10 h-10 grid place-items-center rounded-full bg-brand-blue text-white"><Icon name="mail" size={18} /></span>
+          <div>
+            <p class="text-[11px] uppercase tracking-wider text-white/60 font-display">Email us</p>
+            <p class="font-medium text-white">{SITE.email}</p>
+          </div>
+        </a>
+      </div>
+      <p class="mt-10 text-[11px] uppercase tracking-[0.18em] font-display text-white/40 text-center">92-94 Mawney Road · Romford · RM7 7JB</p>
+    </nav>
+  </div>
 </div>
 
 <script>
-  // Shrink-on-scroll
-  const header = document.getElementById('site-header');
-  let last = 0;
-  function onScroll() {
-    const y = window.scrollY;
-    if (!header) return;
-    if (y > 24) header.classList.add('is-scrolled');
-    else header.classList.remove('is-scrolled');
-    last = y;
-  }
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  // ── Bound ONCE on document — survives Astro view transitions ──
+  // Without this guard the listeners would stack on each page navigation.
+  if (!(window as any).__ccsHeaderBound) {
+    (window as any).__ccsHeaderBound = true;
 
-  // Mobile overlay
-  const overlay = document.getElementById('mobile-overlay');
-  document.querySelectorAll<HTMLButtonElement>('[data-mobile-open]').forEach((b) =>
-    b.addEventListener('click', () => {
-      overlay?.classList.remove('hidden');
-      overlay?.setAttribute('aria-hidden', 'false');
+    const openMenu = () => {
+      const overlay = document.getElementById('mobile-overlay');
+      if (!overlay) return;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      // Inline styles as a belt-and-braces backup in case CSS scoping/layers swallow the rule
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+      overlay.style.visibility = 'visible';
       document.body.style.overflow = 'hidden';
-    })
-  );
-  document.querySelectorAll<HTMLButtonElement>('[data-mobile-close]').forEach((b) =>
-    b.addEventListener('click', () => {
-      overlay?.classList.add('hidden');
-      overlay?.setAttribute('aria-hidden', 'true');
+      document.body.style.touchAction = 'none';
+    };
+    const closeMenu = () => {
+      const overlay = document.getElementById('mobile-overlay');
+      if (!overlay) return;
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+      // Defer visibility-hidden until the fade has had time to finish
+      window.setTimeout(() => {
+        if (!overlay.classList.contains('is-open')) overlay.style.visibility = 'hidden';
+      }, 360);
       document.body.style.overflow = '';
-    })
-  );
+      document.body.style.touchAction = '';
+    };
 
-  // Mega menu (hover for Shop link)
-  const shopLink = document.querySelector<HTMLAnchorElement>('nav[aria-label="Primary"] a[href="/shop"]');
-  const mega = document.getElementById('mega-shop');
-  let megaTimer: number | undefined;
-  function showMega() {
-    if (!mega) return;
-    window.clearTimeout(megaTimer);
-    mega.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
-    mega.classList.add('opacity-100', 'translate-y-0');
-  }
-  function hideMega() {
-    if (!mega) return;
-    megaTimer = window.setTimeout(() => {
-      mega.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-      mega.classList.remove('opacity-100', 'translate-y-0');
-    }, 120);
-  }
-  shopLink?.addEventListener('mouseenter', showMega);
-  shopLink?.addEventListener('mouseleave', hideMega);
-  mega?.addEventListener('mouseenter', showMega);
-  mega?.addEventListener('mouseleave', hideMega);
+    // Delegated click handler — works for all current and future buttons/links
+    document.addEventListener('click', (e) => {
+      const t = e.target as Element | null;
+      if (!t) return;
 
-  // Search trigger — simple alert placeholder for now (functional priority once shop live)
-  document.querySelectorAll<HTMLButtonElement>('[data-search-trigger]').forEach((b) =>
-    b.addEventListener('click', () => {
-      window.location.href = '/shop#search';
-    })
-  );
+      if (t.closest('[data-mobile-open]')) {
+        e.preventDefault();
+        openMenu();
+        return;
+      }
+      if (t.closest('[data-mobile-close]')) {
+        e.preventDefault();
+        closeMenu();
+        return;
+      }
+      // Auto-close mobile menu when any in-overlay link is tapped
+      if (t.closest('#mobile-overlay [data-mobile-link]')) {
+        closeMenu();
+        // let the link's default navigation continue
+        return;
+      }
+      // Search trigger
+      if (t.closest('[data-search-trigger]')) {
+        e.preventDefault();
+        window.location.href = '/shop#search';
+        return;
+      }
+    });
+
+    // Escape closes the menu
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // Shrink-on-scroll — header element persists across view transitions
+    const onScroll = () => {
+      const header = document.getElementById('site-header');
+      if (!header) return;
+      if (window.scrollY > 24) header.classList.add('is-scrolled');
+      else header.classList.remove('is-scrolled');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Mega-menu via delegated hover
+    let megaTimer: number | undefined;
+    const showMega = () => {
+      const mega = document.getElementById('mega-shop');
+      if (!mega) return;
+      window.clearTimeout(megaTimer);
+      mega.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+      mega.classList.add('opacity-100', 'translate-y-0');
+    };
+    const hideMega = () => {
+      const mega = document.getElementById('mega-shop');
+      if (!mega) return;
+      megaTimer = window.setTimeout(() => {
+        mega.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+        mega.classList.remove('opacity-100', 'translate-y-0');
+      }, 120);
+    };
+    document.addEventListener('mouseover', (e) => {
+      const t = e.target as Element | null;
+      if (!t) return;
+      if (t.closest('nav[aria-label="Primary"] a[href="/shop"]') || t.closest('#mega-shop')) showMega();
+    });
+    document.addEventListener('mouseout', (e) => {
+      const t = e.target as Element | null;
+      const r = (e as MouseEvent).relatedTarget as Element | null;
+      if (!t) return;
+      const inside = t.closest('nav[aria-label="Primary"] a[href="/shop"]') || t.closest('#mega-shop');
+      const stillInside = r && (r.closest?.('nav[aria-label="Primary"] a[href="/shop"]') || r.closest?.('#mega-shop'));
+      if (inside && !stillInside) hideMega();
+    });
+
+    // Reset menu state on every navigation — body lock must release
+    document.addEventListener('astro:before-preparation', () => {
+      closeMenu();
+    });
+    document.addEventListener('astro:after-swap', () => {
+      closeMenu();
+      onScroll();
+    });
+  }
 </script>
 
-<style>
+<style is:global>
   #site-header.is-scrolled [data-nav-pill] {
     padding-top: 0.4rem;
     padding-bottom: 0.4rem;
@@ -202,5 +267,56 @@ import { CATEGORIES } from '@/data/categories';
   }
   #site-header.is-scrolled {
     padding-top: 0.5rem;
+  }
+
+  /* ── Mobile overlay — smooth fade + slide ── */
+  #mobile-overlay {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity .35s ease;
+  }
+  #mobile-overlay.is-open {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+  }
+  .mobile-backdrop {
+    background: linear-gradient(180deg, rgb(var(--rgb-blue-deep) / 0.97) 0%, rgb(12 23 47 / 0.97) 100%);
+    backdrop-filter: saturate(180%) blur(22px);
+    -webkit-backdrop-filter: saturate(180%) blur(22px);
+    border: 0;
+    cursor: default;
+  }
+  .mobile-panel {
+    transform: translateY(-12px);
+    opacity: 0;
+    transition: transform .45s cubic-bezier(.2,.7,.2,1) .05s, opacity .45s ease .05s;
+  }
+  .mobile-overlay.is-open .mobile-panel {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .mobile-link {
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity .4s ease, transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .mobile-overlay.is-open .mobile-link {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .mobile-overlay.is-open .mobile-link:nth-child(1) { transition-delay: .12s; }
+  .mobile-overlay.is-open .mobile-link:nth-child(2) { transition-delay: .17s; }
+  .mobile-overlay.is-open .mobile-link:nth-child(3) { transition-delay: .22s; }
+  .mobile-overlay.is-open .mobile-link:nth-child(4) { transition-delay: .27s; }
+  .mobile-overlay.is-open .mobile-link:nth-child(5) { transition-delay: .32s; }
+  .mobile-overlay.is-open .mobile-link:nth-child(6) { transition-delay: .37s; }
+  .mobile-overlay.is-open .mobile-link:nth-child(7) { transition-delay: .42s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-overlay,
+    .mobile-panel,
+    .mobile-link { transition: none !important; }
   }
 </style>
